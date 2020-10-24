@@ -1,0 +1,91 @@
+﻿@using SPM_WebClient.Models
+@model SPM_WebClient.Models.Host
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4 style="text-align:center">@Html.DisplayFor(model => model.Hostname)</h4>
+    </div>
+    <div class="modal-body">
+
+        <div class="detailswindow_item_key" style="float:left"><b>СPU Load:</b></div>
+        <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+            <div class="@Model.CpuLoad_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@Html.DisplayFor(model => model.CpuLoadString)%; height:7px">
+            </div>
+        </div>
+        <div>@Html.DisplayFor(model => model.CpuLoad)%</div>
+        <p></p>
+
+
+        <div class="detailswindow_item_key" style="float:left"><b>Total Memory:</b></div>
+        <div>@Html.DisplayFor(model => model.TotalMemoryString) Mb</div>
+
+
+
+        <div class="detailswindow_item_key" style="float:left"><b>Free Memory:</b></div>
+        <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+            <div class="@Model.UsedMemory_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@Html.DisplayFor(model => model.UsedMemory_PercentString)%; height:7px">
+            </div>
+        </div>
+        <div>@Html.DisplayFor(model => model.AvailableMemoryString) Mb</div>
+        <br />
+
+
+
+        <div style="margin-top:10px"><b>Logical Disks:</b></div>
+        <div style="margin-left:15px">
+            @foreach (LogicalDisc disk in Model.LogicalDisks)
+            {
+                <p>
+                    <div class="detailswindow_item_key" style="float:left"><b>@disk.Name</b></div>
+
+                    <div class="detailswindow_item_key" style="float:left">Total Space:</div>
+                    <div>@disk.TotalSpaceString Mb</div>
+
+                    <div class="detailswindow_item_key" style="float:left">Free Space:</div>
+                    <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                        <div class="@disk.UsedSpace_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@disk.UsedSpace_PercentString%; height:7px">
+                        </div>
+                    </div>
+                    <div>@disk.FreeSpaceString Mb</div>
+                <p></p>
+                <div class="detailswindow_item_key" style="float:left">Disk Load:</div>
+                <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                    <div class="@disk.Load_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@disk.LoadPercentString%; height:7px">
+                    </div>
+                </div>
+                <div>@disk.LoadPercent%</div>
+
+
+                </p>
+                <br />
+            }
+        </div>
+
+        <div style="margin-top:10px"><b>Network Adapters:</b></div>
+        <div style="margin-left:15px">
+            @foreach (NetworkAdapter adapter in Model.NetworkAdapters)
+            {
+                <p>
+                    <div>@adapter.Name</div>
+
+                    <div class="detailswindow_item_key" style="float:left">Network Load:</div>
+                    <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                        <div class="@adapter.Load_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@adapter.LoadPercentString%; height:7px">
+                        </div>
+                    </div>
+                    <div>@adapter.LoadPercent%</div>
+
+                </p>
+            }
+
+        </div>
+
+        <br />
+        <p>
+            Data is actual on @Model.HostAgentDataUpdatedDateTime.ToShortDateString() @Model.HostAgentDataUpdatedDateTime.ToLongTimeString()
+        </p>
+
+    </div>
+</div>
+
