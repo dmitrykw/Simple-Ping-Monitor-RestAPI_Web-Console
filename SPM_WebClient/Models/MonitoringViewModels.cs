@@ -17,6 +17,9 @@ namespace SPM_WebClient.Models
         string cfgpath;
         string url;
         string apikey;
+        bool isreadonly;
+
+        public bool IsReadOnly { get { return isreadonly; } }
 
         public string GroupsHeader = "Groups:";
 
@@ -27,6 +30,7 @@ namespace SPM_WebClient.Models
             //Получить значение по ключу name из секции APICONFIG
             url = manager.GetPrivateString("APICONFIG", "api_hostname");
             apikey = manager.GetPrivateString("APICONFIG", "api_key");
+            isreadonly = (manager.GetPrivateString("APICONFIG", "readonly").ToLower() == "true")? true : false;            
         }
 
         private void FillHosts()
@@ -66,6 +70,28 @@ namespace SPM_WebClient.Models
 
         }
 
+        private void FillHosts(string search_filter, bool is_search)
+        {
+            if (is_search)
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    string JSON = "";
+                    try
+                    {
+
+                        wc.Encoding = Encoding.UTF8;
+
+                        JSON = wc.DownloadString(url + "/api/Hosts?name=" + search_filter + "&is_part_of_name=true&api_token=" + apikey);
+
+                        Hosts = JsonConvert.DeserializeObject<List<Host>>(JSON);
+                    }
+                    catch { GroupsHeader = "You have no hosts or have API connection error. Check API configuration file (Config\\config.cfg)."; }
+                }
+            }
+
+        }
+
         private void FillGroups()
         {
             using (WebClient wc = new WebClient())
@@ -92,28 +118,45 @@ namespace SPM_WebClient.Models
 
             Groups.Where(x => x.Name == "All Hosts").ToList().ForEach(c => c.IsActivated = true);
 
-            // RefreshGroupCollection("All Hosts");
+          
         }
 
         public MonitoringViewModel(string group_filter)
         {
+
             GetConfig();
+
+            if (group_filter == null || group_filter == "") { FillGroups(); return; }
+            
 
             FillHosts(group_filter);
             FillGroups();
 
             Groups.Where(x => x.Name == group_filter).ToList().ForEach(c => c.IsActivated = true);
 
-            //RefreshGroupCollection(group_filter);
-
-            // Hosts.RemoveAll(x => x.GroupName != group_filter);
+           
         }
+        public MonitoringViewModel(string search_filter, bool is_search)
+        {
+            GetConfig();
 
+            if (search_filter == null || search_filter == "") { FillGroups(); return; }
+
+            FillHosts(search_filter, is_search);
+            FillGroups();
+
+            SearchFieldText = search_filter;
+            //Groups.Where(x => x.Name == group_filter).ToList().ForEach(c => c.IsActivated = true);
+
+
+        }
 
 
 
         public void SendHostUpdateAPI(int hostid_int, string hostname, string description, string groupname, bool? isnotifyenabled, bool? isenabled)
         {
+            if (isreadonly) { return; }
+
             using (WebClient wc = new WebClient())
             {
                 string JSON = "";
@@ -157,6 +200,8 @@ namespace SPM_WebClient.Models
 
         public void RemoveHostAPI(int hostid_int)
         {
+            if (isreadonly) { return; }
+
             using (WebClient wc = new WebClient())
             {
                 string JSON = "";
@@ -201,6 +246,8 @@ namespace SPM_WebClient.Models
 
         public void AddHostAPI(string hostname, string description, string groupname, string hosttype)
         {
+            if (isreadonly) { return; }
+
             using (WebClient wc = new WebClient())
             {
                 string JSON = "";
@@ -252,8 +299,9 @@ namespace SPM_WebClient.Models
                 else { return "nogroupselected"; }
             }
         }
-                          
-    }
+        public string SearchFieldText { get; set; }    
+
+}
 
 
 
@@ -270,11 +318,7 @@ namespace SPM_WebClient.Models
             GetConfig();
 
             FillHosts(hostname);            
-            
-
-            //RefreshGroupCollection(group_filter);
-
-            // Hosts.RemoveAll(x => x.GroupName != group_filter);
+                 
         }
 
 

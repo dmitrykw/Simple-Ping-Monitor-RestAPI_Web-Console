@@ -172,6 +172,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Monitoring\Details.cshtml" />
     <Content Include="Views\Monitoring\Index.cshtml" />
+    <Content Include="Views\Monitoring\StringView.cshtml" />
+    <Content Include="Views\Monitoring\SmallMonitorView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

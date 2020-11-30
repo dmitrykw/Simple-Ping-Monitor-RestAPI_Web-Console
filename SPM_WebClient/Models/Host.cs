@@ -7,20 +7,53 @@ namespace SPM_WebClient.Models
 {
     public class Host
     {
+        public string HostCaptionMessage
+        {
+            get
+            {
+                if (HostAgentDataUpdatedDateTime == DateTime.MinValue)
+                {
+                    return "Cannot connect to the Host Agent service. Please install the Agent service on this host. Or check encription key.";
+                }
+                return "Agent is Connected";
+            }
+        }
+        public string HostCaptionMessage_CSSClass
+        {
+            get
+            {
+                if (HostAgentDataUpdatedDateTime == DateTime.MinValue)
+                {
+                    return "dtls_caption_red";
+                }
+                return "dtls_caption_green";
+            }
+        }
+
         public int ID { get; set; }
         public string Hostname { get; set; }
         public string Description { get; set; }
         public string GroupName { get; set; }
-        public string StatusText { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsNotifyEnabled { get; set; }
+        public string HostType { get; set; }
+        public string HostVisualType { get; set; }
+
+        private string statustext { get; set; }
+        public string StatusText
+        {
+            get { return IsEnabled ? statustext : "Host disabled"; }
+            set { statustext = value; }
+        }
+
+        
         public bool Status { get; set; }
         private string imgpath;
         public string ImgPath
         {
             get
-            {
-                return @"url(Content\\Images\\" + imgpath;
+            {               
+                return @"url(\\Content\\Images\\" + imgpath + ")";
             }
             set { imgpath = value; }
         }

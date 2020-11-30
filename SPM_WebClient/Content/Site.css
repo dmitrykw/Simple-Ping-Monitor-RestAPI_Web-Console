@@ -28,36 +28,49 @@ a.mylogo {
     height: 100px;
     text-indent: -9999px; /* hides the link text */
 }
+.footer {
+    float: right;
+    color: #a1a1a3;
+    margin-top:350px
+}
+
+
+#readonly_mode_word {
+    float: right;
+    margin-right:45px;
+    color: #a1a1a3
+}
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 1000px;
 }
 
-    input.newhostbutton {
-        background-color: #90ee90;
-        background: -webkit-gradient(linear, left top, left bottom, from(#90ee90), to(4eeb4e));
-        background: -webkit-linear-gradient(top, #90ee90, 4eeb4e);
-        background: -moz-linear-gradient(top, #90ee90, 4eeb4e);
-        background: -o-linear-gradient(top, #90ee90, 4eeb4e);
-        background: linear-gradient(top, #90ee90, 4eeb4e);
-        border: 1px solid #509111;
-        border-bottom: 1px solid #5b992b;
-        border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        box-shadow: inset 0 1px 0 0 #90ee90;
-        -webkit-box-shadow: 0 1px 0 0 #90ee90 inset;
-        -moz-box-shadow: 0 1px 0 0 #90ee90 inset;
-        color: #29292d;
-        font-weight: normal;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        padding: 6px 6px;
-        text-align: center;
-        text-shadow: 0 0px 0 #396715;        
-    }
+
+input.newhostbutton {
+    background-color: #90ee90;
+    background: -webkit-gradient(linear, left top, left bottom, from(#90ee90), to(4eeb4e));
+    background: -webkit-linear-gradient(top, #90ee90, 4eeb4e);
+    background: -moz-linear-gradient(top, #90ee90, 4eeb4e);
+    background: -o-linear-gradient(top, #90ee90, 4eeb4e);
+    background: linear-gradient(top, #90ee90, 4eeb4e);
+    border: 1px solid #509111;
+    border-bottom: 1px solid #5b992b;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    box-shadow: inset 0 1px 0 0 #90ee90;
+    -webkit-box-shadow: 0 1px 0 0 #90ee90 inset;
+    -moz-box-shadow: 0 1px 0 0 #90ee90 inset;
+    color: #29292d;
+    font-weight: normal;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 6px 6px;
+    text-align: center;
+    text-shadow: 0 0px 0 #396715;
+}
         input.newhostbutton:hover {
             opacity: .75;
             cursor: pointer;
@@ -129,6 +142,12 @@ a.refreshlink {
     background-repeat: no-repeat;
 }
 
+.hostslist_div {
+    float: left;
+    margin-left: 200px;
+    padding-right: 80px;
+}
+
 #monitoring_host_statustext {
     position: absolute;
     border-style: solid;
@@ -144,12 +163,15 @@ a.refreshlink {
     padding-left: 3px;
 }
 
+
+
 #monitoring_host_status_checkbox {
     position: relative;
     z-index: 2;
     left: 273px;
     top: 10px;
 }
+
 
 #monitoring_host_notify_checkbox {
     position: relative;
@@ -158,12 +180,14 @@ a.refreshlink {
     top: 90px;
 }
 
+
 #monitoring_host_isenabled_checkbox {
     position: relative;
     z-index: 2;
     left: 218px;
     top: 102px;
 }
+
 
 #monitoring_host_hostname {
     border-style: solid;
@@ -177,15 +201,19 @@ a.refreshlink {
    text-align:center;
 }
 
+
+
 #monitoring_host_description {
     border-style: solid;
     border-width: 1px;
     float: left;
-    margin-right: 5px;
+    margin-left: 5px;
     width: 165px;
     color: #a1a1a3;    
     text-align: center;
 }
+
+
 
 #monitoring_host_group {
     border-style: solid;
@@ -197,12 +225,15 @@ a.refreshlink {
 }
 
 
+
 .monitoring_host_details {
     position: relative;
     z-index: 2;       
     left: 10px;
     top: -20px;
+    text-decoration:underline;
 }
+
 
 .monitoring_host_green {
     border-color: green;
@@ -296,4 +327,190 @@ a.refreshlink {
 }
 
 
+.dtls_caption_red{
+    color:red;
+}
+.dtls_caption_green {
+    color: green;
+}
+
+
+
+
+
+
+
+
+
+
+.monitoring_host_div_stringview {
+    float: inherit;
+    margin-left: 15px;
+    width: 1250px;
+}
+
+#monitoring_host_statustext_stringview {
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-left: 4px;
+    width: 500px;
+    height: 25px;
+    z-index: 1;
+    font-family: Tahoma;
+    font-size: 13.2px;
+}
+
+#monitoring_host_status_checkbox_stringview {
+    float: left
+}
+
+#monitoring_host_notify_checkbox_stringview {
+    color: #a1a1a3;
+    float: left;
+    margin-left: 10px;
+}
+
+#monitoring_host_isenabled_checkbox_stringview {
+    color: #a1a1a3;
+    float: left;
+    margin-left: 10px;
+}
+
+#monitoring_host_hostname_stringview {
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-left: 5px;
+    width: 170px;
+    color: #a1a1a3;
+    text-align: center;
+}
+
+#monitoring_host_description_stringview {
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-left: 5px;
+    width: 165px;
+    color: #a1a1a3;
+    text-align: center;
+}
+
+#monitoring_host_group_stringview {
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-left: 5px;
+    width: 128px;
+    color: #a1a1a3;
+    text-align: center;
+}
+
+.monitoring_host_details_stringview {
+    float: left;
+    margin-left: 10px;
+}
+
+
+
+
+
+
+
+
+.monitoring_host_div_smallview {
+    float: left;
+    width: 150px;    
+    margin: 15px;
+    background-size: 150px;
+    background-repeat: no-repeat;
+    font-family: Tahoma;
+    font-size: 10px;
+}
+
+#monitoring_host_statustext_smallview {
+    position: absolute;
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-top: 8px;
+    margin-left: 5px;
+    width: 140px;
+    height: 75px;
+    z-index: 1;
+    font-family: Tahoma;
+    font-size: 10px;
+    padding-left: 3px;
+}
+
+
+#monitoring_host_status_checkbox_smallview {
+    position: relative;
+    z-index: 2;
+    left: 129px;
+    top: 7px;
+}
+
+
+#monitoring_host_notify_checkbox_smallview {
+    position: relative;
+    z-index: 2;
+    left: 119px;
+    top: 25px;
+  
+}
+
+
+#monitoring_host_isenabled_checkbox_smallview {
+    position: relative;
+    z-index: 2;
+    left: 120px;
+    top: 23px;
    
+}
+
+.monitoring_host_details_smallview {
+    position: relative;
+    z-index: 2;
+    left: 110px;
+    top: -33px;   
+    text-decoration:underline;
+}
+
+#monitoring_host_hostname_smallview {
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-top: 55px;
+    margin-left: 0px;
+    margin-bottom: 5px;
+    width: 150px;
+    color: #a1a1a3;
+    text-align: center;
+  
+}
+
+#monitoring_host_description_smallview {
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-left: 0px;
+    width: 88px;
+    color: #a1a1a3;
+    text-align: center;
+
+}
+
+
+
+#monitoring_host_group_smallview {
+    border-style: solid;
+    border-width: 1px;
+    margin-left: 2px;
+    float: left;
+    width: 60px;
+    color: #a1a1a3;
+    text-align: center;
+   
+}

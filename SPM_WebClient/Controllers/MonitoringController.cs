@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace SPM_WebClient.Controllers
 {
-   // [Authorize]
+    // [Authorize]
     public class MonitoringController : Controller
     {        
         
@@ -19,17 +19,64 @@ namespace SPM_WebClient.Controllers
         
         public ActionResult Index(string group_filter = "All Hosts")
         {
+            MonitoringViewModel viewModel;
             if (group_filter != "All Hosts")
-            {
-                MonitoringViewModel viewModel = new MonitoringViewModel(group_filter);
-                return View(viewModel);
-            }
-            else
-            {
-                MonitoringViewModel viewModel = new MonitoringViewModel();
-                return View(viewModel);
-            }
+            { viewModel = new MonitoringViewModel(group_filter); }
+            else { viewModel = new MonitoringViewModel(); }
+
+            return GetView(viewModel);
         }
+
+        public ActionResult Search(string search_filter)
+        {
+            MonitoringViewModel viewModel = new MonitoringViewModel(search_filter, true);            
+            return GetView(viewModel);
+        }
+
+
+        private ActionResult GetView(MonitoringViewModel viewModel)
+        {
+
+            if (viewModel.Hosts.Count > 0)
+            {
+                switch (viewModel.Hosts.FirstOrDefault().HostVisualType)
+                {
+                    case "SmallMonitor":
+                        return View("SmallMonitorView", viewModel);
+                    case "String":
+                        return View("StringView", viewModel);
+
+                    default:
+                        return View("Index",viewModel);
+                }
+            }
+            else { return View("Index", viewModel); }
+        }
+
+
+        public ActionResult SmallMonitorView(string group_filter = "All Hosts")
+        {
+            MonitoringViewModel viewModel;
+            if (group_filter != "All Hosts")
+            {viewModel = new MonitoringViewModel(group_filter);}
+            else
+            { viewModel = new MonitoringViewModel(); }
+
+            return View("SmallMonitorView", viewModel);
+        }
+        public ActionResult StringView(string group_filter = "All Hosts")
+        {
+            MonitoringViewModel viewModel;
+            if (group_filter != "All Hosts")
+            {viewModel = new MonitoringViewModel(group_filter);}
+            else
+            {viewModel = new MonitoringViewModel();}
+
+            return View("StringView", viewModel);
+        }
+
+
+
         public ActionResult Details(string hostname)
         {
             MonitoringDetailsViewModel viewModel = new MonitoringDetailsViewModel(hostname);
@@ -73,7 +120,20 @@ namespace SPM_WebClient.Controllers
                 host.IsEnabled = isenabled.HasValue?isenabled.Value:false;                
             }
 
-            return View(viewModel);
+            if (viewModel.Hosts.Count > 0)
+            {
+                switch (viewModel.Hosts.Where(x => x.ID == hostid_int).FirstOrDefault().HostVisualType)
+                {
+                    case "SmallMonitor":
+                        return View("SmallMonitorView", viewModel);
+                    case "String":
+                        return View("StringView", viewModel);
+
+                    default:
+                        return View(viewModel);
+                }
+            }
+            else { return View(viewModel); }
             //return RedirectToAction("Index");
         }
 
@@ -90,11 +150,13 @@ namespace SPM_WebClient.Controllers
 
             System.Threading.Thread.Sleep(2200);
 
-        
+
             //return RedirectToRoute(new { controller = "Monitoring", action = "Index" });
-            return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter });
+            //return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter });
             // return RedirectToAction("Index",viewModel);
             // return View("Index", viewModel);
+
+         return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter }); 
         }
 
 
@@ -124,9 +186,10 @@ namespace SPM_WebClient.Controllers
             //viewModel.Hosts.Remove(viewModel.Hosts.Where(x => x.ID == hostid_int).FirstOrDefault());
 
             System.Threading.Thread.Sleep(2200);
-            //return RedirectToAction("Index");
-            //    return View("Index",viewModel);
-            return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter });
+        
+
+          return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter }); 
+
         }
     }
 }
