@@ -5,88 +5,305 @@
     <div class="modal-header">
         <button class="close" data-dismiss="modal" area-hidden="true">X</button>
         <h4 style="text-align:center">@Html.DisplayFor(model => model.Hostname)</h4>
-        <h6 class="@Model.HostCaptionMessage_CSSClass" style="text-align:center">@Html.DisplayFor(model => model.HostCaptionMessage)</h6>
+        <h6 id ="hostcaptionmessage" class="@Model.HostCaptionMessage_CSSClass" style="text-align:center">@Html.DisplayFor(model => model.HostCaptionMessage)</h6>
     </div>
     <div class="modal-body">
-
-        <div class="detailswindow_item_key" style="float:left"><b>СPU Load:</b></div>
-        <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
-            <div class="@Model.CpuLoad_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@Html.DisplayFor(model => model.CpuLoadString)%; height:7px">
-            </div>
-        </div>
-        <div>@Html.DisplayFor(model => model.CpuLoad)%</div>
-        <p></p>
-
-
-        <div class="detailswindow_item_key" style="float:left"><b>Total Memory:</b></div>
-        <div>@Html.DisplayFor(model => model.TotalMemoryString) Mb</div>
-
-
-
-        <div class="detailswindow_item_key" style="float:left"><b>Free Memory:</b></div>
-        <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
-            <div class="@Model.UsedMemory_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@Html.DisplayFor(model => model.UsedMemory_PercentString)%; height:7px">
-            </div>
-        </div>
-        <div>@Html.DisplayFor(model => model.AvailableMemoryString) Mb</div>
-        <br />
-
-
-
-        <div style="margin-top:10px"><b>Logical Disks:</b></div>
-        <div style="margin-left:15px">
-            @foreach (LogicalDisc disk in Model.LogicalDisks)
-            {
-                <p>
-                    <div class="detailswindow_item_key" style="float:left"><b>@disk.Name</b></div>
-
-                    <div class="detailswindow_item_key" style="float:left">Total Space:</div>
-                    <div>@disk.TotalSpaceString Mb</div>
-
-                    <div class="detailswindow_item_key" style="float:left">Free Space:</div>
-                    <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
-                        <div class="@disk.UsedSpace_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@disk.UsedSpace_PercentString%; height:7px">
-                        </div>
-                    </div>
-                    <div>@disk.FreeSpaceString Mb</div>
-                <p></p>
-                <div class="detailswindow_item_key" style="float:left">Disk Load:</div>
-                <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
-                    <div class="@disk.Load_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@disk.LoadPercentString%; height:7px">
-                    </div>
+        <div style="display:none" id="hosttype">@Model.HostType</div>
+        <div id="agentdatadiv">
+            <div class="detailswindow_item_key" style="float:left"><b>СPU Load:</b></div>
+            <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                <div class="@Model.CpuLoad_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@Html.DisplayFor(model => model.CpuLoadString)%; height:7px">
                 </div>
-                <div>@disk.LoadPercent%</div>
+            </div>
+            <div>@Html.DisplayFor(model => model.CpuLoad)%</div>
+            <p></p>
 
 
-                </p>
-                <br />
-            }
-        </div>
+            <div class="detailswindow_item_key" style="float:left"><b>Total Memory:</b></div>
+            <div>@Html.DisplayFor(model => model.TotalMemoryString) Mb</div>
 
-        <div style="margin-top:10px"><b>Network Adapters:</b></div>
-        <div style="margin-left:15px">
-            @foreach (NetworkAdapter adapter in Model.NetworkAdapters)
-            {
-                <p>
-                    <div>@adapter.Name</div>
 
-                    <div class="detailswindow_item_key" style="float:left">Network Load:</div>
+
+            <div class="detailswindow_item_key" style="float:left"><b>Free Memory:</b></div>
+            <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                <div class="@Model.UsedMemory_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@Html.DisplayFor(model => model.UsedMemory_PercentString)%; height:7px">
+                </div>
+            </div>
+            <div>@Html.DisplayFor(model => model.AvailableMemoryString) Mb</div>
+            <br />
+
+
+
+            <div style="margin-top:10px"><b>Logical Disks:</b></div>
+            <div style="margin-left:15px">
+                @foreach (LogicalDisc disk in Model.LogicalDisks)
+                {
+                    <p>
+                        <div class="detailswindow_item_key" style="float:left"><b>@disk.Name</b></div>
+
+                        <div class="detailswindow_item_key" style="float:left">Total Space:</div>
+                        <div>@disk.TotalSpaceString Mb</div>
+
+                        <div class="detailswindow_item_key" style="float:left">Free Space:</div>
+                        <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                            <div class="@disk.UsedSpace_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@disk.UsedSpace_PercentString%; height:7px">
+                            </div>
+                        </div>
+                        <div>@disk.FreeSpaceString Mb</div>
+                    <p></p>
+                    <div class="detailswindow_item_key" style="float:left">Disk Load:</div>
                     <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
-                        <div class="@adapter.Load_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@adapter.LoadPercentString%; height:7px">
+                        <div class="@disk.Load_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@disk.LoadPercentString%; height:7px">
                         </div>
                     </div>
-                    <div>@adapter.LoadPercent%</div>
+                    <div>@disk.LoadPercent%</div>
 
-                </p>
-            }
 
+                    </p>
+                    <br />
+                }
+            </div>
+
+            <div style="margin-top:10px"><b>Network Adapters:</b></div>
+            <div style="margin-left:15px">
+                @foreach (NetworkAdapter adapter in Model.NetworkAdapters)
+                {
+                    <p>
+                        <div>@adapter.Name</div>
+
+                        <div class="detailswindow_item_key" style="float:left">Network Load:</div>
+                        <div class="progress" style="height:7px;width:80px;float:left;margin:7px">
+                            <div class="@adapter.Load_progress_classname" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@adapter.LoadPercentString%; height:7px">
+                            </div>
+                        </div>
+                        <div>@adapter.LoadPercent%</div>
+
+                    </p>
+                }
+
+            </div>
+
+            <br />
+            <p>
+                Data is actual on @Model.HostAgentDataUpdatedDateTime.ToShortDateString() @Model.HostAgentDataUpdatedDateTime.ToLongTimeString()
+            </p>
         </div>
+        <form>
+            <input type="hidden" value="@Model.ID" name="hostid" , id="hostid" />
+            <br />
+            <div id="customoptionsdiv">
+                <p>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomnotificationsettings" name="isenabledcustomnotificationsettings" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomNotificationSettings").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div class="isenabledcustomnotificationsettings"><label class="groupbox">Use custom notification settings for this host (CPU, mem, etc.)</label></div>
+                </p>
+                <div id="agentitemsdiv">
 
-        <br />
-        <p>
-            Data is actual on @Model.HostAgentDataUpdatedDateTime.ToShortDateString() @Model.HostAgentDataUpdatedDateTime.ToLongTimeString()
-        </p>
+                    <ul type="none" style="padding:0; margin-left:10px">
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyifcpuisoverload" name="customagentnotifyifcpuisoverload" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_CPU_is_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customagentnotifyifcpuisoverload" style="float:left"><label class="groupbox">Notify when host CPU is overloaded more than</label></div>
+                            <div style="float:left"><input type="text" id="customagentcpuoverloadpercent" name="customagentcpuoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_CPU_Overload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div> <label class="groupbox">%</label></div>
+                        </li>
 
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyiflowfreemem" name="customagentnotifyiflowfreemem" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_LowFreeMem").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customagentnotifyiflowfreemem" style="float:left"><label class="groupbox">Notify when host Free memory is lower than</label></div>
+                            <div style="float:left"><input type="text" id="customagentlowfreememmegabytes" name="customagentlowfreememmegabytes" class="form-control" style="width:57px;height:17px; padding:2px;margin-left:-1px; text-align: right" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_LowFreeMem_Megabytes").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div> <label class="groupbox">Mb</label></div>
+                        </li>
+
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifylowdisksfreespace" name="customagentnotifylowdisksfreespace" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_LowDisksFreeSpace").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customagentnotifylowdisksfreespace" style="float:left"><label class="groupbox">Notify when host Disks free space is lower than</label></div>
+                            <div style="float:left"><input type="text" id="customagentlowdisksfreespacemegabytes" name="customagentlowdisksfreespacemegabytes" class="form-control" style="width:57px;height:17px; padding:2px;margin-left:-1px; text-align: right" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_LowDisksFreeSpace_Megabytes").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div> <label class="groupbox">Mb</label></div>
+                        </li>
+
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyifdisksoverload" name="customagentnotifyifdisksoverload" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_Disks_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customagentnotifyifdisksoverload" style="float:left"><label class="groupbox">Notify when host Disks overloaded more than</label></div>
+                            <div style="float:left"><input type="text" id="customagentdisksoverloadpercent" name="customagentdisksoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_DisksOverload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div> <label class="groupbox">%</label></div>
+                        </li>
+
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyifnetadaptersoverload" name="customagentnotifyifnetadaptersoverload" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_NetAdapters_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customagentnotifyifnetadaptersoverload" style="float:left"><label class="groupbox">Notify when host Network adapters are overloaded more than</label></div>
+                            <div style="float:left"><input type="text" id="customagentnetadaptersoverloadpercent" name="customagentnetadaptersoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_NetAdaptersOverload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div> <label class="groupbox">%</label></div>
+                        </li>
+                        <li style="margin-top:7px">
+                            <div style="float:left"><input type="checkbox" id="customnotifyifagentconnectionlost" name="customnotifyifagentconnectionlost" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AgentConnection_Lost").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customnotifyifagentconnectionlost"><label class="groupbox">Notify when Agent service have a connection error</label></div>
+                        </li>
+                    </ul>                    
+                </div>
+            </div>
+            <div id="otheroptionsdiv">
+                <p>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomothernotificationsettings" name="isenabledcustomothernotificationsettings" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomOtherNotificationSettings").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div class="isenabledcustomothernotificationsettings"><label class="groupbox">Use custom other notification settings (instead common)</label></div>
+                </p>
+                <div id="otheritemsdiv">
+
+                    <ul type="none" style="padding:0; margin-left:10px">
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customnotifyifanswertimeislong" name="customnotifyifanswertimeislong" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AnswerTime_IsLong").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customnotifyifanswertimeislong" style="float:left"><label class="groupbox">Notify if host ICMP Answer Time is more than</label></div>
+                            <div style="float:left"><input type="text" id="customlonganswertimemiliseconds" name="customlonganswertimemiliseconds" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_LongAnswerTime_miliseconds").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div> <label class="groupbox">ms</label></div>
+                        </li>
+                        <li style="margin-top:7px">
+                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputerrestarted" name="customeventlognotifyifcomputerrestarted" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerRestarted").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="width:300px" class="customeventlognotifyifcomputerrestarted"><label class="groupbox">Notify if this host has been restarted</label></div>
+                        </li>
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputergoingreboot" name="customeventlognotifyifcomputergoingreboot" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerGoingReboot").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customeventlognotifyifcomputergoingreboot"><label class="groupbox">Notify when this host is going to shutdown/reboot</label></div>
+                        </li>
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputerrebootedbyuser" name="customeventlognotifyifcomputerrebootedbyuser" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerRebootedByUser").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customeventlognotifyifcomputerrebootedbyuser"><label class="groupbox">Notify if previous shutdown/reboot has been initiated by user</label></div>
+                        </li>
+                        <li style="margin-top:7px">
+                            <div style="float:left"><input type="checkbox" id="customeventlogforwardcriticalevents" name="customeventlogforwardcriticalevents" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_ForwardCriticalEvents").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customeventlogforwardcriticalevents" style="width:280px"><label class="groupbox">Forward Critical System Events</label></div>
+                        </li>
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="customeventlogforwarderrorevents" name="customeventlogforwarderrorevents" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_ForwardErrorEvents").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="customeventlogforwarderrorevents" style="width:280px"><label class="groupbox">Forward Error System Events</label></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div id="customemaildiv">
+                <p>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomemail" name="isenabledcustomemail" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomEmail").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div class="isenabledcustomemail"><label class="groupbox">Use custom notification e-mail (instead common)</label></div>
+                </p>
+
+                <div id="emailitemsdiv">
+                    <ul type="none" style="padding:0; margin-left:10px">
+                        <li>
+                            <div style="float:left"><label class="groupbox">E-mail:</label></div>
+                            <div class="customemail"><input type="text" id="customemail" name="customemail" class="form-control" style="width:250px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Email").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
+<script type="text/javascript">
+
+    $(function () {
+        $.ajaxSetup({ cache: false });
+
+        //Autohide and disable field
+        AutoHideAndDisableFields();
+        HideDataforWebHosts()
+
+
+        //ToolTips
+        $('.isenabledcustomnotificationsettings').tooltip({ title: "Use this notification settings for the current host instead of the general 'Agent Settings' on the options tab", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customagentnotifyifcpuisoverload').tooltip({ title: "Notify when CPU is overloaded on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customagentnotifyiflowfreemem').tooltip({ title: "Notify when Free memory is low on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customagentnotifylowdisksfreespace').tooltip({ title: "Notify when free space on some Disk on this host is low", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customagentnotifyifdisksoverload').tooltip({ title: "Notify when some Disk is overloaded on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customagentnotifyifnetadaptersoverload').tooltip({ title: "Notify when some Network adapter is overloaded on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customnotifyifagentconnectionlost').tooltip({ title: "Notify when Agent Service on this host have a connection error", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.isenabledcustomothernotificationsettings').tooltip({ title: "Use custom other notification settings for this host (instead commmon settings from options tab)", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customnotifyifanswertimeislong').tooltip({ title: "Notify if this host is responding for too long", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customeventlognotifyifcomputerrestarted').tooltip({ title: "Notify if this host has been restarted", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customeventlognotifyifcomputergoingreboot').tooltip({ title: "Notify when this host is going to shutdown/reboot", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customeventlognotifyifcomputerrebootedbyuser').tooltip({ title: "Notify if previous shudown/reboot has been initiated by user", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customeventlogforwardcriticalevents').tooltip({ title: "Forward all Events with Critical Level from System Log", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customeventlogforwarderrorevents').tooltip({ title: "Forward all Events with Error Level from System Log", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.isenabledcustomemail').tooltip({ title: "Use custom notification e-mail for this host (instead commmon e-mail from options tab)", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.customemail').tooltip({ title: "You can insert multiple values. Use ' , ' as delimeter", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+    })
+
+    function updateCustomFields(myform) {
+            
+            //Autohide and disable field
+            AutoHideAndDisableFields();
+
+            //Posting Data
+            var dataToPost = {};
+
+
+            dataToPost.hostid = myform.elements["hostid"].value;
+            dataToPost.isenabledcustomnotificationsettings = myform.elements["isenabledcustomnotificationsettings"].checked;
+
+            dataToPost.customagentnotifyifcpuisoverload = myform.elements["customagentnotifyifcpuisoverload"].checked;
+            dataToPost.customagentcpuoverloadpercent = myform.elements["customagentcpuoverloadpercent"].value;
+            dataToPost.customagentnotifyiflowfreemem = myform.elements["customagentnotifyiflowfreemem"].checked;
+            dataToPost.customagentlowfreememmegabytes = myform.elements["customagentlowfreememmegabytes"].value;
+            dataToPost.customagentnotifylowdisksfreespace = myform.elements["customagentnotifylowdisksfreespace"].checked;
+            dataToPost.customagentlowdisksfreespacemegabytes = myform.elements["customagentlowdisksfreespacemegabytes"].value;
+            dataToPost.customagentnotifyifdisksoverload = myform.elements["customagentnotifyifdisksoverload"].checked;
+            dataToPost.customagentdisksoverloadpercent = myform.elements["customagentdisksoverloadpercent"].value;
+            dataToPost.customagentnotifyifnetadaptersoverload = myform.elements["customagentnotifyifnetadaptersoverload"].checked;
+            dataToPost.customagentnetadaptersoverloadpercent = myform.elements["customagentnetadaptersoverloadpercent"].value;
+
+            dataToPost.customnotifyifagentconnectionlost = myform.elements["customnotifyifagentconnectionlost"].checked;
+
+
+            dataToPost.isenabledcustomothernotificationsettings = myform.elements["isenabledcustomothernotificationsettings"].checked;
+
+            dataToPost.customnotifyifanswertimeislong = myform.elements["customnotifyifanswertimeislong"].checked;
+            dataToPost.customlonganswertimemiliseconds = myform.elements["customlonganswertimemiliseconds"].value;
+
+            dataToPost.customeventlognotifyifcomputerrestarted = myform.elements["customeventlognotifyifcomputerrestarted"].checked;
+            dataToPost.customeventlognotifyifcomputergoingreboot = myform.elements["customeventlognotifyifcomputergoingreboot"].checked;
+            dataToPost.customeventlognotifyifcomputerrebootedbyuser = myform.elements["customeventlognotifyifcomputerrebootedbyuser"].checked;
+            dataToPost.customeventlogforwardcriticalevents = myform.elements["customeventlogforwardcriticalevents"].checked;
+            dataToPost.customeventlogforwarderrorevents = myform.elements["customeventlogforwarderrorevents"].checked;
+
+            dataToPost.isenabledcustomemail = myform.elements["isenabledcustomemail"].checked;
+            dataToPost.customemail = myform.elements["customemail"].value;
+
+             $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                    if (data.status == 0) {
+                        alert(data.message);
+                    }
+
+             });
+
+    }
+
+    function AutoHideAndDisableFields() {
+
+        //Autohide and disable field
+        if ($("#isenabledcustomnotificationsettings").is(":checked")) { $("#agentitemsdiv").show(); } else { $("#agentitemsdiv").hide(); }
+        if ($("#isenabledcustomothernotificationsettings").is(":checked")) { $("#otheritemsdiv").show(); } else { $("#otheritemsdiv").hide(); }
+        if ($("#isenabledcustomemail").is(":checked")) { $("#emailitemsdiv").show(); } else { $("#emailitemsdiv").hide(); }
+
+
+        if ($("#customagentnotifyifcpuisoverload").is(":checked")) { $("#customagentcpuoverloadpercent").prop("readonly", false) } else { $("#customagentcpuoverloadpercent").prop("readonly", true); }
+        if ($("#customagentnotifyiflowfreemem").is(":checked")) { $("#customagentlowfreememmegabytes").prop("readonly", false) } else { $("#customagentlowfreememmegabytes").prop("readonly", true); }
+        if ($("#customagentnotifylowdisksfreespace").is(":checked")) { $("#customagentlowdisksfreespacemegabytes").prop("readonly", false) } else { $("#customagentlowdisksfreespacemegabytes").prop("readonly", true); }
+        if ($("#customagentnotifyifdisksoverload").is(":checked")) { $("#customagentdisksoverloadpercent").prop("readonly", false) } else { $("#customagentdisksoverloadpercent").prop("readonly", true); }
+        if ($("#customagentnotifyifnetadaptersoverload").is(":checked")) { $("#customagentnetadaptersoverloadpercent").prop("readonly", false) } else { $("#customagentnetadaptersoverloadpercent").prop("readonly", true); }
+        if ($("#customnotifyifanswertimeislong").is(":checked")) { $("#customlonganswertimemiliseconds").prop("readonly", false) } else { $("#customlonganswertimemiliseconds").prop("readonly", true); }
+        if ($("#isenabledcustomemail").is(":checked")) { $("#customemail").prop("readonly", false) } else { $("#customemail").prop("readonly", true); }
+
+
+    }
+
+
+    //Hide Elements for Web Hosts
+    function HideDataforWebHosts() {
+        if ($("#hosttype").text() === "WebHost") {
+            $("#hostcaptionmessage").text("This is Web Host");
+            $("#agentdatadiv").hide();           
+            $("#customoptionsdiv").hide();           
+            $("#otheroptionsdiv").hide();                         
+        }
+        
+    }
+
+</script>

@@ -22,15 +22,21 @@ namespace SPM_WebClient.Controllers
             MonitoringViewModel viewModel;
             if (group_filter != "All Hosts")
             { viewModel = new MonitoringViewModel(group_filter); }
-            else { viewModel = new MonitoringViewModel(); }
-
+            else { viewModel = new MonitoringViewModel(); }         
             return GetView(viewModel);
         }
 
         public ActionResult Search(string search_filter)
         {
-            MonitoringViewModel viewModel = new MonitoringViewModel(search_filter, true);            
-            return GetView(viewModel);
+            if (search_filter != "")
+            {
+                MonitoringViewModel viewModel = new MonitoringViewModel(search_filter, true);
+                return GetView(viewModel);
+            }else
+            {
+                MonitoringViewModel viewModel = new MonitoringViewModel();
+                return GetView(viewModel);
+            }
         }
 
 
@@ -77,79 +83,68 @@ namespace SPM_WebClient.Controllers
 
 
 
-        public ActionResult Details(string hostname)
+        public ActionResult Details(int id)
         {
-            MonitoringDetailsViewModel viewModel = new MonitoringDetailsViewModel(hostname);
+            MonitoringDetailsViewModel viewModel = new MonitoringDetailsViewModel(id);
 
-            Host myhost = viewModel.Hosts.FirstOrDefault(x => x.Hostname == hostname);
+            Host myhost = viewModel.Hosts.FirstOrDefault(x => x.ID == id);
             if (myhost != null)
                 return PartialView(myhost);
             return HttpNotFound();
         }
 
+        public ActionResult HostLog(int id)
+        {
+            MonitoringHostLogViewModel viewModel = new MonitoringHostLogViewModel(id);
+            KeyValuePair<int, string> hostlog = new KeyValuePair<int, string>();
+            if (viewModel.HostsLogs.Count() > 0)
+            {
+                hostlog = viewModel.HostsLogs.FirstOrDefault(x => x.Key == id);
+                return View(hostlog);
+            }
+            else {return View(hostlog);}
+            
+        }
+
 
         [HttpPost]
-        public ActionResult Index(string selectedgroupname, string hostid, string hostname, string description, string groupname, bool? isnotifyenabled, bool? isenabled)
-        {           
-            string group_filter = selectedgroupname;
-
-            MonitoringViewModel viewModel;
-
-            if (group_filter != "All Hosts")
+        public ActionResult Index(UpdateHostObj model)
+        {
+            if (model != null)
             {
-                 viewModel = new MonitoringViewModel(group_filter);              
-            }
-            else
-            {
-                 viewModel = new MonitoringViewModel();              
-            }
-
-
-            int hostid_int = 0;
-            int.TryParse(hostid, out hostid_int);
-
-            viewModel.SendHostUpdateAPI(hostid_int, hostname, description, groupname, isnotifyenabled.HasValue ? isnotifyenabled.Value: false, isenabled.HasValue? isenabled.Value:false);
-
-           
-            foreach (Host host in viewModel.Hosts.Where(x=>x.ID == hostid_int))
-            {
-                host.Hostname = hostname;
-                host.Description = description;
-                host.GroupName = groupname;
-                host.IsNotifyEnabled = isnotifyenabled.HasValue?isnotifyenabled.Value:false;
-                host.IsEnabled = isenabled.HasValue?isenabled.Value:false;                
-            }
-
-            if (viewModel.Hosts.Count > 0)
-            {
-                switch (viewModel.Hosts.Where(x => x.ID == hostid_int).FirstOrDefault().HostVisualType)
+                try
                 {
-                    case "SmallMonitor":
-                        return View("SmallMonitorView", viewModel);
-                    case "String":
-                        return View("StringView", viewModel);
+                    string curr_hostid = model.hostid;
+                    int curr_hostid_int = 0;
+                    int.TryParse(curr_hostid, out curr_hostid_int);
 
-                    default:
-                        return View(viewModel);
+
+                    MonitoringViewModel viewModel = new MonitoringViewModel(curr_hostid_int);
+
+
+                    viewModel.SendHostUpdateAPI(model);
+
+
+                    return Json(new { status = 1, message = "Update Host Data Success" });
                 }
+                catch(Exception ex) { return Json(new { status = 0, message = "Failed Update Host Data. Exception: " + ex.Message }); }
+         
             }
-            else { return View(viewModel); }
-            //return RedirectToAction("Index");
+            return Json(new { status = 0, message = "Failed Update Host Data. Post Object is null" });
         }
 
         [HttpPost]
         public ActionResult AddHost(string selectedgroupname, string hostname, string description, string hosttype)
         {
             string group_filter = selectedgroupname;
-
-            MonitoringViewModel viewModel = new MonitoringViewModel(group_filter);
-
+            try
+            {                
+                MonitoringViewModel viewModel = new MonitoringViewModel(group_filter);
+                viewModel.AddHostAPI(hostname, description, selectedgroupname, hosttype);
+                System.Threading.Thread.Sleep(2200);
+            }
+            catch {}
             
-            viewModel.AddHostAPI(hostname, description, selectedgroupname, hosttype);
-
-
-            System.Threading.Thread.Sleep(2200);
-
 
             //return RedirectToRoute(new { controller = "Monitoring", action = "Index" });
             //return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter });
@@ -164,28 +159,29 @@ namespace SPM_WebClient.Controllers
         public ActionResult RemoveHost(string selectedgroupname, string hostid)
         {
             string group_filter = selectedgroupname;
+            try
+            {
+                MonitoringViewModel viewModel = new MonitoringViewModel(group_filter);
 
-            MonitoringViewModel viewModel = new MonitoringViewModel(group_filter);
-
-           // if (group_filter != "All Hosts")
-           // {
-           //     viewModel = new MonitoringViewModel(group_filter);
-           // }
-           // else
-           // {
-            //    viewModel = new MonitoringViewModel();
-            //}
-
-
-            int hostid_int = 0;
-            int.TryParse(hostid, out hostid_int);
-
-            viewModel.RemoveHostAPI(hostid_int);
+               // if (group_filter != "All Hosts")
+               // {
+               //     viewModel = new MonitoringViewModel(group_filter);
+               // }
+               // else
+               // {
+                //    viewModel = new MonitoringViewModel();
+                //}
 
 
-            //viewModel.Hosts.Remove(viewModel.Hosts.Where(x => x.ID == hostid_int).FirstOrDefault());
+                int hostid_int = 0;
+                int.TryParse(hostid, out hostid_int);
 
-            System.Threading.Thread.Sleep(2200);
+                viewModel.RemoveHostAPI(hostid_int);
+                System.Threading.Thread.Sleep(2200);
+            }
+            catch { }
+
+            //viewModel.Hosts.Remove(viewModel.Hosts.Where(x => x.ID == hostid_int).FirstOrDefault());           
         
 
           return RedirectToAction("Index", "Monitoring", new { group_filter = group_filter }); 

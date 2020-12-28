@@ -2,6 +2,11 @@
     color: #a1a1a3;
 }
 
+#hostlogpage {
+    color: azure;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
 body {
     padding-top: 50px;
     padding-bottom: 20px;    
@@ -20,9 +25,35 @@ body {
     white-space: normal;
 }
 
+/*Modal Window with Host Details*/
+#dialogContent{
+   max-width:475px
+}
+
+input[type=checkbox] {
+    width: 12px;
+    height: 12px;
+}
+
+
+
+
+
+.tooltip-wide, .tooltip.bottom, .tooltip-inner {
+    width: auto; /* ширина подсказки */
+    max-width: none; /* максимальная ширина подсказки (по умолчанию 200px) */
+    text-wrap: none;
+    white-space: nowrap;
+    z-index:999;
+}
+
+
+
+
+
 a.mylogo {
     background: url(Images/logo.png) no-repeat top left;
-    background-size:100px;
+    background-size: 100px;
     display: block;
     width: 100px;
     height: 100px;
@@ -31,7 +62,7 @@ a.mylogo {
 .footer {
     float: right;
     color: #a1a1a3;
-    margin-top:350px
+    margin-top:50px
 }
 
 
@@ -119,6 +150,42 @@ input.newhostbutton {
             -moz-box-shadow: 0 0 10px 5px #8a0a0a inset;
         }
 
+
+
+    a.regularbtn {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: normal;        
+        padding: 0px 3px;
+        background-color: #3c3c40;
+        border: 1px solid black;
+        border-bottom: 1px solid black;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+ 
+    
+        color: #9d9d9f;
+        text-align: center;
+        text-shadow: 0 -1px 0 black;
+        text-decoration:none;
+    }
+
+        a.regularbtn:hover {
+            opacity: .75;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        a.regularbtn:active {
+            border: 1px solid #8a0a0a;
+            box-shadow: 0 0 10px 5px #8a0a0a inset;
+            -webkit-box-shadow: 0 0 10px 5px #8a0a0a inset;
+            -moz-box-shadow: 0 0 10px 5px #8a0a0a inset;
+            text-decoration: none;
+        }
+
+
+
     .page_title {
         text-align: right;
         margin-right: 50px;
@@ -165,31 +232,34 @@ a.refreshlink {
 
 
 
-#monitoring_host_status_checkbox {
+.monitoring_host_status_checkbox {
     position: relative;
     z-index: 2;
     left: 273px;
     top: 10px;
+    width:25px;
 }
 
 
-#monitoring_host_notify_checkbox {
+.monitoring_host_notify_checkbox {
     position: relative;
     z-index: 2;
     left: 233px;
     top: 90px;
+    width: 65px;
 }
 
 
-#monitoring_host_isenabled_checkbox {
+.monitoring_host_isenabled_checkbox {
     position: relative;
     z-index: 2;
     left: 218px;
     top: 102px;
+    width: 80px;
 }
 
 
-#monitoring_host_hostname {
+.monitoring_host_hostname {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -203,7 +273,7 @@ a.refreshlink {
 
 
 
-#monitoring_host_description {
+.monitoring_host_description {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -215,7 +285,7 @@ a.refreshlink {
 
 
 
-#monitoring_host_group {
+.monitoring_host_group {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -226,13 +296,24 @@ a.refreshlink {
 
 
 
-.monitoring_host_details {
+a.monitoring_host_details {
     position: relative;
-    z-index: 2;       
-    left: 10px;
-    top: -20px;
-    text-decoration:underline;
+    z-index: 2;
+    left: 241.5px;
+    top: -20px;    
+    font-size: 12px;
 }
+
+a.monitoring_host_log {
+    position: relative;
+    z-index: 2;
+    left: 210px;
+    top: 5px;
+    font-size: 12px;
+}
+
+
+
 
 
 .monitoring_host_green {
@@ -277,6 +358,9 @@ a.refreshlink {
     border: 1px dotted #4CAF50; /* Green */
     background-color: transparent;
     color: #a1a1a3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .group_button_selected {
@@ -285,6 +369,9 @@ a.refreshlink {
     width: 190px;
     border: 1px solid #4CAF50; /* Green */
     background-color: #90ee90;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .group_button:hover {
@@ -307,7 +394,8 @@ a.refreshlink {
     height: auto;
     float: left;
     position: fixed;
-    margin-top:45px;
+    margin-top: 45px;
+    z-index: 999;
 }
 #groups_absolute {
     width: 200px;
@@ -315,6 +403,7 @@ a.refreshlink {
     float: left;
     position: absolute;
     margin-top: 45px;
+    z-index: 999;
 }
 
 #btns_fixed {
@@ -346,7 +435,7 @@ a.refreshlink {
 .monitoring_host_div_stringview {
     float: inherit;
     margin-left: 15px;
-    width: 1250px;
+    width: 1300px;
 }
 
 #monitoring_host_statustext_stringview {
@@ -361,23 +450,23 @@ a.refreshlink {
     font-size: 13.2px;
 }
 
-#monitoring_host_status_checkbox_stringview {
+.monitoring_host_status_checkbox_stringview {
     float: left
 }
 
-#monitoring_host_notify_checkbox_stringview {
+.monitoring_host_notify_checkbox_stringview {
     color: #a1a1a3;
     float: left;
     margin-left: 10px;
 }
 
-#monitoring_host_isenabled_checkbox_stringview {
+.monitoring_host_isenabled_checkbox_stringview {
     color: #a1a1a3;
     float: left;
     margin-left: 10px;
 }
 
-#monitoring_host_hostname_stringview {
+.monitoring_host_hostname_stringview {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -387,7 +476,7 @@ a.refreshlink {
     text-align: center;
 }
 
-#monitoring_host_description_stringview {
+.monitoring_host_description_stringview {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -397,7 +486,7 @@ a.refreshlink {
     text-align: center;
 }
 
-#monitoring_host_group_stringview {
+.monitoring_host_group_stringview {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -407,14 +496,17 @@ a.refreshlink {
     text-align: center;
 }
 
-.monitoring_host_details_stringview {
+a.monitoring_host_details_stringview {
     float: left;
     margin-left: 10px;
+    font-size: 12px;
 }
 
-
-
-
+a.monitoring_host_log_stringview {
+    float: left;
+    margin-left: 10px;    
+    font-size: 12px;
+}
 
 
 
@@ -445,40 +537,50 @@ a.refreshlink {
 }
 
 
-#monitoring_host_status_checkbox_smallview {
+.monitoring_host_status_checkbox_smallview {
     position: relative;
     z-index: 2;
     left: 129px;
     top: 7px;
+    width:18px;
 }
 
 
-#monitoring_host_notify_checkbox_smallview {
+.monitoring_host_notify_checkbox_smallview {
     position: relative;
     z-index: 2;
     left: 119px;
     top: 25px;
-  
+    width: 28px;
 }
 
 
-#monitoring_host_isenabled_checkbox_smallview {
+.monitoring_host_isenabled_checkbox_smallview {
     position: relative;
     z-index: 2;
     left: 120px;
     top: 23px;
-   
+    width: 27px;
 }
 
-.monitoring_host_details_smallview {
+a.monitoring_host_details_smallview {
     position: relative;
     z-index: 2;
-    left: 110px;
-    top: -33px;   
-    text-decoration:underline;
+    left: 112px;
+    top: -31px;    
+    font-size: 8px;
 }
 
-#monitoring_host_hostname_smallview {
+a.monitoring_host_log_smallview {
+    position: relative;
+    z-index: 2;
+    left: -26.5px;
+    top: 7.5px;    
+    font-size: 8px;
+}
+
+
+.monitoring_host_hostname_smallview {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -491,7 +593,7 @@ a.refreshlink {
   
 }
 
-#monitoring_host_description_smallview {
+.monitoring_host_description_smallview {
     border-style: solid;
     border-width: 1px;
     float: left;
@@ -504,7 +606,7 @@ a.refreshlink {
 
 
 
-#monitoring_host_group_smallview {
+.monitoring_host_group_smallview {
     border-style: solid;
     border-width: 1px;
     margin-left: 2px;
@@ -513,4 +615,57 @@ a.refreshlink {
     color: #a1a1a3;
     text-align: center;
    
+}
+
+
+
+
+
+
+div.bigblock{
+    float:left;
+}
+
+fieldset.groupbox {
+    border: 1px groove #ddd !important;
+    color: #a1a1a3;
+    padding: 10px;
+    padding-top: 5px;      
+    margin:10px;
+
+}
+
+legend.groupbox {
+    font-size: 1.1em !important;
+    font-weight: normal !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0px 10px 0px 10px;
+    border-bottom: none;
+    color: #a1a1a3;
+    margin: 0px;
+}
+
+legend.included_groupbox {
+    font-size: 0.9em !important;
+    font-weight: normal !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0px 10px 0px 10px;
+    border-bottom: none;
+    color: #a1a1a3;
+    margin: 0px;
+}
+
+label.groupbox {         
+    color: #a1a1a3;
+    font-size: 0.9em !important;
+    font-weight: normal !important;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+select.groupbox {    
+    color: black;
+    font-size: 0.9em !important;
+    font-weight: normal !important;
 }

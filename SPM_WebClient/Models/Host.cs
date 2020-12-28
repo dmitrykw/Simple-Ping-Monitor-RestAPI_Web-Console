@@ -5,13 +5,57 @@ using System.Web;
 
 namespace SPM_WebClient.Models
 {
+    public class UpdateHostObj 
+    { 
+    
+        public string hostname { get; set; }
+        public string description { get; set; }
+        public string groupname { get; set; }
+        public string selectedgroupname { get; set; }
+        public string hostid { get; set; }
+        public bool? isnotifyenabled { get; set; }
+        public bool? isenabled { get; set; }
+
+
+        public bool? isenabledcustomnotificationsettings { get; set; }
+
+        public bool? customagentnotifyifcpuisoverload { get; set; }
+        public int? customagentcpuoverloadpercent { get; set; }
+        public bool? customagentnotifyiflowfreemem { get; set; }
+        public int? customagentlowfreememmegabytes { get; set; }
+        public bool? customagentnotifylowdisksfreespace { get; set; }
+        public int? customagentlowdisksfreespacemegabytes { get; set; }
+        public bool? customagentnotifyifdisksoverload { get; set; }
+        public int? customagentdisksoverloadpercent { get; set; }
+        public bool? customagentnotifyifnetadaptersoverload { get; set; }
+        public int? customagentnetadaptersoverloadpercent { get; set; }
+
+        public bool? customnotifyifagentconnectionlost { get; set; }
+
+        public bool? isenabledcustomothernotificationsettings { get; set; }
+
+        public bool? customnotifyifanswertimeislong { get; set; }
+        public int? customlonganswertimemiliseconds { get; set; }
+
+        public bool? customeventlognotifyifcomputerrestarted { get; set; }
+        public bool? customeventlognotifyifcomputergoingreboot { get; set; }
+        public bool? customeventlognotifyifcomputerrebootedbyuser { get; set; }
+        public bool? customeventlogforwardcriticalevents { get; set; }
+        public bool? customeventlogforwarderrorevents { get; set; }
+
+        public bool? isenabledcustomemail { get; set; }
+        public string customemail { get; set; }
+
+    }
+
+
     public class Host
     {
         public string HostCaptionMessage
         {
             get
             {
-                if (HostAgentDataUpdatedDateTime == DateTime.MinValue)
+                if (HostAgentDataUpdatedDateTime.AddMinutes(15) < DateTime.Now)
                 {
                     return "Cannot connect to the Host Agent service. Please install the Agent service on this host. Or check encription key.";
                 }
@@ -22,7 +66,10 @@ namespace SPM_WebClient.Models
         {
             get
             {
-                if (HostAgentDataUpdatedDateTime == DateTime.MinValue)
+                if (HostType == "WebHost")
+                { return "dtls_caption_green"; }
+
+                if (HostAgentDataUpdatedDateTime.AddMinutes(15) < DateTime.Now)
                 {
                     return "dtls_caption_red";
                 }
@@ -91,6 +138,8 @@ namespace SPM_WebClient.Models
         public List<LogicalDisc> LogicalDisks { get; set; }
         public List<NetworkAdapter> NetworkAdapters { get; set; }
 
+        public List<KeyValuePair<string, dynamic>> HostCustomOptions { get; set; }
+
         public string CpuLoad_progress_classname
         {
             get
@@ -132,6 +181,7 @@ namespace SPM_WebClient.Models
             HostAgentDataUpdatedDateTime = DateTime.MinValue;
             LogicalDisks = new List<LogicalDisc>();
             NetworkAdapters = new List<NetworkAdapter>();
+            HostCustomOptions = new List<KeyValuePair<string, dynamic>>();
         }
 
 

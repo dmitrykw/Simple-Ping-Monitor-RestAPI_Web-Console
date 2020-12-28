@@ -7,8 +7,9 @@
 <h1 class="page_title">Monitoring</h1>
 
 <div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog" style="width: 350px"></div>
+    <div id="dialogContent" class="modal-dialog"></div>
 </div>
+<div style="color:lightgray;margin-left:150px">@Model.ConnectionErrorHeader</div>
 <div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
 <div>
     <div style="float:right">
@@ -17,7 +18,7 @@
     <div style="float:right; margin-right:100px">
         @using (Html.BeginForm("Search", "Monitoring", FormMethod.Get, new { enctype = "multipart/form-data" }))
         {
-            <div style="float:left"><input type="search" value="@Model.SearchFieldText" name="search_filter" , class="form-control" placeholder="Search host" style="height:25px; padding-top: 5px" /></div>
+            <div style="float:left"><input type="search" value="@Model.SearchFieldText" name="search_filter" , class="form-control searchtext" placeholder="Search host" style="height:25px; padding-top: 5px" /></div>
             <div style="float:left"><input type="submit" value="Search" class="btn btn-warning" style="height:25px; padding-top: 1px" /></div>
         }
     </div>
@@ -30,7 +31,7 @@
                 <input type="hidden" value="hostname or IP" name="hostname" , id="hostname" />
                 <input type="hidden" value="Description" name="description" , id="description" />
                 <input type="hidden" value="Host" name="hosttype" , id="hosttype" />
-                <input type="submit" value="Add IP Host" class="newhostbutton" />
+                <input type="submit" value="Add IP Host" class="newhostbutton newiphost" />
             }
         </div>
         <div style="float:left">
@@ -41,7 +42,7 @@
                 <input type="hidden" value="http://yoursite.com" name="hostname" , id="hostname" />
                 <input type="hidden" value="Description" name="description" , id="description" />
                 <input type="hidden" value="WebHost" name="hosttype" , id="hosttype" />
-                <input type="submit" value="Add Web host" class="newhostbutton" />
+                <input type="submit" value="Add Web host" class="newhostbutton newwebhost" />
             }
         </div>
     </div>
@@ -51,7 +52,7 @@
         </div>
         @foreach (Group curr_group in Model.Groups)
         {
-            <button type="button" class="@(curr_group.IsActivated ? "group_button_selected" : "group_button")" onclick="location.href='@Url.Action("Index", "Monitoring", new { group_filter = @curr_group.Name})'">@curr_group.Name</button>
+            <button type="button" class="@(curr_group.IsActivated ? "group_button_selected" : "group_button")" title="@curr_group.Name" onclick="location.href='@Url.Action("Index", "Monitoring", new { group_filter = @curr_group.Name})'">@curr_group.Name</button>
         }
     </div>
     <div name="HostsList" class="hostslist_div">
@@ -60,8 +61,7 @@
 
 
             <div class="monitoring_host_div" style="background-image : @curr_host.ImgPath">
-                @using (Html.BeginForm("Index", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
+                <form>
                     <div id=monitoring_host_statustext class="@((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_statustext_orange" : "monitoring_host_statustext_green") : "monitoring_host_statustext_red") : "monitoring_host_statustext_white")">
 
                         <input type="hidden" value="@Model.SelectedGroupName" name="selectedgroupname" , id="selectedgroupname" />
@@ -93,20 +93,21 @@
                         </div>
                     </div>
 
-                    <div id="monitoring_host_status_checkbox">@Html.CheckBoxFor(Model => curr_host.Status, new { Name = "status", id = "status" })</div>
-                    <div id="monitoring_host_notify_checkbox">Notify:@Html.CheckBoxFor(Model => curr_host.IsNotifyEnabled, new { Name = "isnotifyenabled", id = "isnotifyenabled", onclick = "this.form.submit();" })</div>
-                    <div id="monitoring_host_isenabled_checkbox">Enabled:@Html.CheckBoxFor(Model => curr_host.IsEnabled, new { Name = "isenabled", id = "isenabled", onclick = "this.form.submit();" })</div>
+                    <div class="monitoring_host_status_checkbox">@Html.CheckBoxFor(Model => curr_host.Status, new { Name = "status", id = "status" })</div>
+                    <div class="monitoring_host_notify_checkbox">Notify:@Html.CheckBoxFor(Model => curr_host.IsNotifyEnabled, new { Name = "isnotifyenabled", id = "isnotifyenabled", onclick = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_isenabled_checkbox">Enabled:@Html.CheckBoxFor(Model => curr_host.IsEnabled, new { Name = "isenabled", id = "isenabled", onclick = "updateHostFields(this.form);" })</div>
 
 
 
-                    @Html.ActionLink("Details", "Details", new { hostname = curr_host.Hostname }, new { @class = "monitoring_host_details" })
+                    @Html.ActionLink("Details", "Details", new { id = curr_host.ID }, new { @class = "regularbtn monitoring_host_details" })
+                    @Html.ActionLink("Log", "HostLog", new { id = curr_host.ID }, new { @class = "regularbtn monitoring_host_log" })
 
 
-                    <div id=monitoring_host_hostname class="@((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Hostname, new { Class = "textboxstyle", Style = "width:165px", Name = "hostname", id = "hostname", onchange = "this.form.submit();" })</div>
-                    <div id=monitoring_host_description class="@((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Description, new { Class = "textboxstyle", Style = "width:160px", Name = "description", id = "description", onchange = "this.form.submit();" })</div>
-                    <div id="monitoring_host_group" class="@((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.GroupName, new { Class = "textboxstyle", Style = "width:123px", Name = "groupname", id = "groupname", onchange = "this.form.submit();" })</div>
+                    <div class="monitoring_host_hostname @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Hostname, new { Class = "textboxstyle", Style = "width:165px", Name = "hostname", id = "hostname", placeholder = "hostname/ip", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_description @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Description, new { Class = "textboxstyle", Style = "width:160px", Name = "description", id = "description", placeholder = "host description", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_group @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.GroupName, new { Class = "textboxstyle", Style = "width:123px", Name = "groupname", id = "groupname", placeholder = "host groupname", onchange = "updateHostFields(this.form);" })</div>
 
-                }
+                </form>
 
                 <div style="float:left; margin-top:-100px; margin-left:5px">
                     @using (Html.BeginForm("RemoveHost", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -140,6 +141,48 @@
                     $('#modDialog').modal('show');
                 });
             });
-        })       
+
+
+            //ToolTips
+            $('.monitoring_host_hostname').tooltip({ title: "IP or hostname", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_description').tooltip({ title: "Host Description", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_group').tooltip({ title: "Host Group name", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_status_checkbox').tooltip({ title: "Current Host Status", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_notify_checkbox').tooltip({ title: "Enable/Disable notifications for this host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_isenabled_checkbox').tooltip({ title: "Enable/Disable querying this Host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_details').tooltip({ title: "View host data CPU, mem, etc. and customize notification settings", animation: true, placement: "left", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_log').tooltip({ title: "Get Log for this host", animation: true, placement: "left", delay: { show: 300, hide: 100 } });            
+            $('.removehosts_btn').tooltip({ title: "Delete this Host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.newiphost').tooltip({ title: "Add new IP host", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
+            $('.newwebhost').tooltip({ title: "Add new WebSite", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+            $('.searchtext').tooltip({ title: "Put the part of ip/hostname", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+            $('.group_button').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
+            $('.group_button_selected').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
+        })
+
+
+        function updateHostFields(myform) {
+
+                var dataToPost = {};
+
+                dataToPost.hostname = myform.elements["hostname"].value;
+                dataToPost.description = myform.elements["description"].value;
+                dataToPost.groupname = myform.elements["groupname"].value;
+                dataToPost.selectedgroupname = myform.elements["selectedgroupname"].value;
+                dataToPost.hostid = myform.elements["hostid"].value;
+                dataToPost.isnotifyenabled = myform.elements["isnotifyenabled"].checked;
+                dataToPost.isenabled = myform.elements["isenabled"].checked;
+
+                $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                    if (data.status == 0) {
+                        alert(data.message);
+                    }
+
+                });
+        }
+
+
+       
+
     </script>
 }

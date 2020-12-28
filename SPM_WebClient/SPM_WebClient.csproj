@@ -122,6 +122,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MonitoringController.cs" />
+    <Compile Include="Controllers\OptionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -132,6 +133,9 @@
     <Compile Include="Models\LogicalDisc.cs" />
     <Compile Include="Models\MonitoringViewModels.cs" />
     <Compile Include="Models\NetworkAdapter.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\OptionsViewModels.cs" />
+    <Compile Include="Models\Spm_Api_Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +178,8 @@
     <Content Include="Views\Monitoring\Index.cshtml" />
     <Content Include="Views\Monitoring\StringView.cshtml" />
     <Content Include="Views\Monitoring\SmallMonitorView.cshtml" />
+    <Content Include="Views\Options\Index.cshtml" />
+    <Content Include="Views\Monitoring\HostLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

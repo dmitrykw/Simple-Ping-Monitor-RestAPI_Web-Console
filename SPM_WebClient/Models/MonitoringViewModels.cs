@@ -23,91 +23,12 @@ namespace SPM_WebClient.Models
 
         public string GroupsHeader = "Groups:";
 
-        private void GetConfig()
-        {
-            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
-            INIManager manager = new INIManager(cfgpath);
-            //Получить значение по ключу name из секции APICONFIG
-            url = manager.GetPrivateString("APICONFIG", "api_hostname");
-            apikey = manager.GetPrivateString("APICONFIG", "api_key");
-            isreadonly = (manager.GetPrivateString("APICONFIG", "readonly").ToLower() == "true")? true : false;            
-        }
+        public bool ApiIsAvailable { get; set; }
+        public string ConnectionErrorHeader = "";
 
-        private void FillHosts()
-        {                       
-            using (WebClient wc = new WebClient())
-            {
-                string JSON = "";
-                try
-                {
-                    wc.Encoding = Encoding.UTF8;
-                    JSON = wc.DownloadString(url + "/api/Hosts?api_token=" + apikey);
+        public string SearchFieldText { get; set; }
 
-                    Hosts = JsonConvert.DeserializeObject<List<Host>>(JSON);               
-
-                }
-                catch { GroupsHeader = "You have no hosts or have API connection error. Check API configuration file (Config\\config.cfg)."; }
-            }
-
-        }
-
-        private void FillHosts(string group_filter)
-        {
-            using (WebClient wc = new WebClient())
-            {
-                string JSON = "";
-                try
-                {
-
-                    wc.Encoding = Encoding.UTF8;
-                    
-                    JSON = wc.DownloadString(url + "/api/Groups?name=" + group_filter + "&api_token=" + apikey);
-
-                    Hosts = JsonConvert.DeserializeObject<List<Host>>(JSON);
-                }
-                catch { GroupsHeader = "You have no hosts or have API connection error. Check API configuration file (Config\\config.cfg)."; }
-            }
-
-        }
-
-        private void FillHosts(string search_filter, bool is_search)
-        {
-            if (is_search)
-            {
-                using (WebClient wc = new WebClient())
-                {
-                    string JSON = "";
-                    try
-                    {
-
-                        wc.Encoding = Encoding.UTF8;
-
-                        JSON = wc.DownloadString(url + "/api/Hosts?name=" + search_filter + "&is_part_of_name=true&api_token=" + apikey);
-
-                        Hosts = JsonConvert.DeserializeObject<List<Host>>(JSON);
-                    }
-                    catch { GroupsHeader = "You have no hosts or have API connection error. Check API configuration file (Config\\config.cfg)."; }
-                }
-            }
-
-        }
-
-        private void FillGroups()
-        {
-            using (WebClient wc = new WebClient())
-            {
-                string JSON = "";
-                try
-                {
-                    wc.Encoding = Encoding.UTF8;
-                   
-                    JSON = wc.DownloadString(url + "/api/Groups?api_token=" + apikey);
-
-                    Groups = JsonConvert.DeserializeObject<List<Group>>(JSON);
-                }
-                catch { }
-            }
-        }
+       
 
         public MonitoringViewModel()
         {
@@ -151,96 +72,35 @@ namespace SPM_WebClient.Models
 
         }
 
+        public MonitoringViewModel(int host_id)
+        {
+            GetConfig();            
+
+            FillHosts(host_id);
+            FillGroups();
+           
+        }
 
 
-        public void SendHostUpdateAPI(int hostid_int, string hostname, string description, string groupname, bool? isnotifyenabled, bool? isenabled)
+        public void SendHostUpdateAPI(UpdateHostObj model)
         {
             if (isreadonly) { return; }
 
-            using (WebClient wc = new WebClient())
-            {
-                string JSON = "";
-                try
-                {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            try
+            { spm_api_processor.SendHostUpdate(model); }
+            catch (Exception ex) { throw ex; }
 
-
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/api/Hosts"); //- Токен надо передать в header е
-
-                    request.Method = "PUT";
-                    request.ContentType = "application/json; charset=utf-8";
-                    request.Accept = "application/json; charset=utf-8";
-                    request.Headers.Add("api_token", apikey);
-
-                   
-                    
-                    StreamWriter requestWriter = new StreamWriter(request.GetRequestStream(), Encoding.UTF8);
-
-                    JSON = JsonConvert.SerializeObject(new { ID = hostid_int, Hostname = hostname, Description = description, GroupName = groupname, IsNotifyEnabled = isnotifyenabled.HasValue? isnotifyenabled.Value : false, IsEnabled = isenabled.HasValue? isenabled.Value:false });
-
-                    requestWriter.Write(JSON);
-
-                    requestWriter.Close();
-
-
-                    try
-                    {
-                        WebResponse webResponse = request.GetResponse();
-
-                   //     Stream webStream = webResponse.GetResponseStream();
-                  //      StreamReader responseReader = new StreamReader(webStream);
-                   //     string response = responseReader.ReadToEnd();
-                   //     responseReader.Close();
-                    }
-                    catch { }
-
-                }
-                catch { }
-            }
         }
 
         public void RemoveHostAPI(int hostid_int)
         {
             if (isreadonly) { return; }
 
-            using (WebClient wc = new WebClient())
-            {
-                string JSON = "";
-                try
-                {
-
-
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/api/Hosts"); //- Токен надо передать в header е
-
-                    request.Method = "DELETE";
-                    request.ContentType = "application/json; charset=utf-8";
-                    request.Accept = "application/json; charset=utf-8";
-                    request.Headers.Add("api_token", apikey);
-
-
-
-                    StreamWriter requestWriter = new StreamWriter(request.GetRequestStream(), Encoding.UTF8);
-
-                    JSON = JsonConvert.SerializeObject(new { ID = hostid_int});
-
-                    requestWriter.Write(JSON);
-
-                    requestWriter.Close();
-
-
-                    try
-                    {
-                        WebResponse webResponse = request.GetResponse();
-
-                        //     Stream webStream = webResponse.GetResponseStream();
-                        //      StreamReader responseReader = new StreamReader(webStream);
-                        //     string response = responseReader.ReadToEnd();
-                        //     responseReader.Close();
-                    }
-                    catch { }
-
-                }
-                catch { }
-            }
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            try
+            { spm_api_processor.RemoveHost(hostid_int); }
+            catch (Exception ex) { throw ex; }
         }
 
 
@@ -248,45 +108,10 @@ namespace SPM_WebClient.Models
         {
             if (isreadonly) { return; }
 
-            using (WebClient wc = new WebClient())
-            {
-                string JSON = "";
-                try
-                {
-
-
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/api/Hosts"); //- Токен надо передать в header е
-
-                    request.Method = "POST";
-                    request.ContentType = "application/json; charset=utf-8";
-                    request.Accept = "application/json; charset=utf-8";
-                    request.Headers.Add("api_token", apikey);
-
-
-
-                    StreamWriter requestWriter = new StreamWriter(request.GetRequestStream(), Encoding.UTF8);
-
-                    JSON = JsonConvert.SerializeObject(new { Hostname = hostname, Description = description, GroupName = groupname, HostType = hosttype });
-
-                    requestWriter.Write(JSON);
-
-                    requestWriter.Close();
-
-
-                    try
-                    {
-                        WebResponse webResponse = request.GetResponse();
-
-                        //     Stream webStream = webResponse.GetResponseStream();
-                        //      StreamReader responseReader = new StreamReader(webStream);
-                        //     string response = responseReader.ReadToEnd();
-                        //     responseReader.Close();
-                    }
-                    catch { }
-
-                }
-                catch { }
-            }
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            try
+            { spm_api_processor.AddNewHost(hostname, description, groupname, hosttype); }
+            catch (Exception ex) { throw ex; }
         }
 
         public string SelectedGroupName {
@@ -299,9 +124,97 @@ namespace SPM_WebClient.Models
                 else { return "nogroupselected"; }
             }
         }
-        public string SearchFieldText { get; set; }    
 
-}
+        private void GetConfig()
+        {
+            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
+            INIManager manager = new INIManager(cfgpath);
+            //Получить значение по ключу name из секции APICONFIG
+            url = manager.GetPrivateString("APICONFIG", "api_hostname");
+            apikey = manager.GetPrivateString("APICONFIG", "api_key");
+            isreadonly = (manager.GetPrivateString("APICONFIG", "readonly").ToLower() == "true") ? true : false;
+        }
+
+        private void FillHosts()
+        {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+                        
+                try
+                {                    
+                    Hosts = spm_api_processor.GetHosts();
+                    ApiIsAvailable = true;
+                }
+                catch
+                {
+                    ApiIsAvailable = false;
+                    ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                }            
+        }
+
+        private void FillHosts(string group_filter)
+        {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+           
+                try
+                {
+                    Hosts = spm_api_processor.GetHosts(group_filter);
+
+                ApiIsAvailable = true;
+                }
+                catch
+                {
+                    ApiIsAvailable = false;
+                    ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                }            
+        }
+
+
+        private void FillHosts(string search_filter, bool is_search)
+        {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                
+                    try
+                    {
+                        Hosts = spm_api_processor.GetHosts(search_filter, is_search);
+                        ApiIsAvailable = true;
+                    }
+                    catch
+                    {
+                        ApiIsAvailable = false;
+                        ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                    }                            
+        }
+
+        private void FillHosts(int id)
+        {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                     
+                try
+                {
+                    Hosts = spm_api_processor.GetHosts(id);
+                    ApiIsAvailable = true;
+                }
+                catch {
+                    ApiIsAvailable = false;
+                    ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                }            
+
+        }
+
+        private void FillGroups()
+        {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                        
+                try
+                {                
+                    Groups = spm_api_processor.GetGroups();
+                ApiIsAvailable = false;
+                }
+                catch 
+                {
+                    ApiIsAvailable = false;
+                    ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                }            
+        }
+
+    }
 
 
 
@@ -313,11 +226,11 @@ namespace SPM_WebClient.Models
         string url;
         string apikey;
 
-        public MonitoringDetailsViewModel(string hostname)
+        public MonitoringDetailsViewModel(int id)
         {
             GetConfig();
 
-            FillHosts(hostname);            
+            FillHosts(id);            
                  
         }
 
@@ -333,21 +246,66 @@ namespace SPM_WebClient.Models
             apikey = manager.GetPrivateString("APICONFIG", "api_key");
         }
 
-        private void FillHosts(string hostname)
+        private void FillHosts(int id)
         {
-            using (WebClient wc = new WebClient())
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            try
             {
-                string JSON = "";
-                try
-                {
-                    wc.Encoding = Encoding.UTF8;
-                    JSON = wc.DownloadString(url + "/api/Hosts?name=" + hostname + "&api_token=" + apikey);
-
-                    Hosts = JsonConvert.DeserializeObject<List<Host>>(JSON);
-                }
-                catch { }
+                Hosts = spm_api_processor.GetHosts(id);             
             }
+            catch
+            {}
 
+        }
+
+    }
+
+
+    public class MonitoringHostLogViewModel
+    {
+
+        public List<KeyValuePair<int, string>> HostsLogs = new List<KeyValuePair<int, string>>();
+        string cfgpath;
+        string url;
+        string apikey;
+
+        public MonitoringHostLogViewModel(int id)
+        {
+            GetConfig();
+
+            FillHostLog(id);            
+                 
+        }
+
+
+
+
+        private void GetConfig()
+        {
+            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
+            INIManager manager = new INIManager(cfgpath);
+            //Получить значение по ключу name из секции APICONFIG
+            url = manager.GetPrivateString("APICONFIG", "api_hostname");
+            apikey = manager.GetPrivateString("APICONFIG", "api_key");
+        }
+
+        private void FillHostLog(int id)
+        {
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            try
+            {
+                KeyValuePair<int?, string> hostlog = spm_api_processor.GetHostLog(id);
+                if (hostlog.Key.HasValue && hostlog.Value != null)
+                {
+
+                   // string loghtmlstring = hostlog.Value.Replace("\r\n", @"<br />");
+
+                    HostsLogs.Add(new KeyValuePair<int, string>(hostlog.Key.Value, hostlog.Value)); 
+                }
+            }
+            catch
+            {}
+            //http://localhost:51634/Monitoring/HostLog?id=211656325
         }
 
     }
