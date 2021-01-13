@@ -5,3 +5,5 @@ ASP.NET MVC application Web Console for the Simple Ping Monitor (http://simple-p
 ![](https://github.com/dmitrykw/Simple-Ping-Monitor-RestAPI_Web-Console/blob/main/SPM_WebClient/Screenshots/2.jpg?raw=true)
 ![](https://github.com/dmitrykw/Simple-Ping-Monitor-RestAPI_Web-Console/blob/main/SPM_WebClient/Screenshots/3.jpg?raw=true)
 ![](https://github.com/dmitrykw/Simple-Ping-Monitor-RestAPI_Web-Console/blob/main/SPM_WebClient/Screenshots/4.jpg?raw=true)
+![](https://github.com/dmitrykw/Simple-Ping-Monitor-RestAPI_Web-Console/blob/main/SPM_WebClient/Screenshots/5.jpg?raw=true)
+![](https://github.com/dmitrykw/Simple-Ping-Monitor-RestAPI_Web-Console/blob/main/SPM_WebClient/Screenshots/6.jpg?raw=true)
