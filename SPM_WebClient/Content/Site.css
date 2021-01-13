@@ -264,14 +264,27 @@ a.refreshlink {
     border-width: 1px;
     float: left;
     margin-top: 180px;
-    margin-left: 60px;
+    margin-left: 5px;
     margin-bottom: 5px;
-    width: 170px;
+    width: 190px;
     color: #a1a1a3;
    text-align:center;
 }
 
+.monitoring_host_selectpic {
+    margin-top: 160px;
+    width: 103px;
+    height: 24px;
+    float: left;
+}
 
+.monitoring_host_combobox {
+    border-width: 1px;
+    width: 103px;
+    height: 24px;
+    color: #a1a1a3;
+    background: #29292d;
+}
 
 .monitoring_host_description {
     border-style: solid;
@@ -299,7 +312,7 @@ a.refreshlink {
 a.monitoring_host_details {
     position: relative;
     z-index: 2;
-    left: 241.5px;
+    left: 46.5px;
     top: -20px;    
     font-size: 12px;
 }
@@ -307,7 +320,7 @@ a.monitoring_host_details {
 a.monitoring_host_log {
     position: relative;
     z-index: 2;
-    left: 210px;
+    left: 15px;
     top: 5px;
     font-size: 12px;
 }
@@ -566,7 +579,7 @@ a.monitoring_host_log_stringview {
 a.monitoring_host_details_smallview {
     position: relative;
     z-index: 2;
-    left: 112px;
+    left: 111px;
     top: -31px;    
     font-size: 8px;
 }
@@ -587,10 +600,23 @@ a.monitoring_host_log_smallview {
     margin-top: 55px;
     margin-left: 0px;
     margin-bottom: 5px;
-    width: 150px;
+    width: 133px;
     color: #a1a1a3;
     text-align: center;
   
+}
+
+.monitoring_host_selectpic_smallview {
+    margin-top: 55px;
+}
+
+
+.monitoring_host_combobox_smallview {
+    border-width: 1px;
+    width: 17px;
+    height: 17.5px;
+    color: #a1a1a3;
+    background: #29292d;
 }
 
 .monitoring_host_description_smallview {

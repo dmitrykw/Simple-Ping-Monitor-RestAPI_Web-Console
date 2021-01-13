@@ -5,7 +5,16 @@
     <div class="modal-header">
         <button class="close" data-dismiss="modal" area-hidden="true">X</button>
         <h4 style="text-align:center">@Html.DisplayFor(model => model.Hostname)</h4>
-        <h6 id ="hostcaptionmessage" class="@Model.HostCaptionMessage_CSSClass" style="text-align:center">@Html.DisplayFor(model => model.HostCaptionMessage)</h6>
+        <table align="center">
+            <tr>
+                <td>
+                    <h6 id="hostcaptionmessage" class="@Model.HostCaptionMessage_CSSClass">@Html.DisplayFor(model => model.HostCaptionMessage)</h6>
+                </td>
+                <td style="">
+                    <h6 id="agentversion" class="@Model.HostCaptionMessage_CSSClass" style="font-size:9px;margin-top:5px; margin-left:5px">@Html.DisplayFor(model => model.AgentVersion)</h6>
+                </td>
+            </tr>
+        </table>
     </div>
     <div class="modal-body">
         <div style="display:none" id="hosttype">@Model.HostType</div>
@@ -208,6 +217,11 @@
 
 
         //ToolTips
+        let agentversion_tooltip = { title: "Your Agent version is up to date", animation: true, placement: "right", delay: { show: 300, hide: 100 } }        
+        if ($('#agentversion').text().includes("Update this Agent")) { agentversion_tooltip = { title: "For using some latest functions you need to manually update this host Agent. Unfortunately it cannot be automaticaly.", animation: true, placement: "right", delay: { show: 300, hide: 100 } } }
+        $('#agentversion').tooltip(agentversion_tooltip);
+       // $('#agentversion').tooltip({ title: "Use this notification settings for the current host instead of the general 'Agent Settings' on the options tab", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        
         $('.isenabledcustomnotificationsettings').tooltip({ title: "Use this notification settings for the current host instead of the general 'Agent Settings' on the options tab", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.customagentnotifyifcpuisoverload').tooltip({ title: "Notify when CPU is overloaded on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.customagentnotifyiflowfreemem').tooltip({ title: "Notify when Free memory is low on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
@@ -299,6 +313,7 @@
     function HideDataforWebHosts() {
         if ($("#hosttype").text() === "WebHost") {
             $("#hostcaptionmessage").text("This is Web Host");
+            $("#agentversion").text("");            
             $("#agentdatadiv").hide();           
             $("#customoptionsdiv").hide();           
             $("#otheroptionsdiv").hide();                         

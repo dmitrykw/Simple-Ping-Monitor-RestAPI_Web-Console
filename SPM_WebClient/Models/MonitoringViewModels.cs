@@ -230,7 +230,7 @@ namespace SPM_WebClient.Models
         {
             GetConfig();
 
-            FillHosts(id);            
+            FillHosts(id);
                  
         }
 

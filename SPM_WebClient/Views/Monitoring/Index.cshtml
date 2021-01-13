@@ -60,7 +60,7 @@
         {
 
 
-            <div class="monitoring_host_div" style="background-image : @curr_host.ImgPath">
+            <div class="monitoring_host_div" style="background-image :  url(/Content/Images/@curr_host.ImgPath)">
                 <form>
                     <div id=monitoring_host_statustext class="@((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_statustext_orange" : "monitoring_host_statustext_green") : "monitoring_host_statustext_red") : "monitoring_host_statustext_white")">
 
@@ -103,9 +103,28 @@
                     @Html.ActionLink("Log", "HostLog", new { id = curr_host.ID }, new { @class = "regularbtn monitoring_host_log" })
 
 
-                    <div class="monitoring_host_hostname @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Hostname, new { Class = "textboxstyle", Style = "width:165px", Name = "hostname", id = "hostname", placeholder = "hostname/ip", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_hostname @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Hostname, new { Class = "textboxstyle", Style = "width:187px", Name = "hostname", id = "hostname", placeholder = "hostname/ip", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_selectpic">
+                        <select class="monitoring_host_combobox @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")" id="imgpath" name="imgpath" onchange="updateHostPicture(this.form);">
+                            <option value="defaultmonitor">Default from Options</option>
+                            <option value="switch.png" @(curr_host.ImgPath.Contains("switch.png") ? ("selected =\"selected\"") : (""))>Switch</option>
+                            <option value="router.png" @(curr_host.ImgPath.Contains("router.png") ? ("selected =\"selected\"") : (""))>Router</option>
+                            <option value="wifi.png" @(curr_host.ImgPath.Contains("wifi.png") ? ("selected =\"selected\"") : (""))>WiFiRouter</option>
+                            <option value="firewall.png" @(curr_host.ImgPath.Contains("firewall.png") ? ("selected =\"selected\"") : (""))>Firewall</option>
+                            <option value="server.png" @(curr_host.ImgPath.Contains("server.png") ? ("selected =\"selected\"") : (""))>Server</option>
+                            <option value="vserver.png" @(curr_host.ImgPath.Contains("vserver.png") ? ("selected =\"selected\"") : (""))>VirtualServer</option>
+                            <option value="ipphone.png" @(curr_host.ImgPath.Contains("ipphone.png") ? ("selected =\"selected\"") : (""))>IPPhone</option>
+                            <option value="ipcam.png" @(curr_host.ImgPath.Contains("ipcam.png") ? ("selected =\"selected\"") : (""))>IPCam</option>
+                            <option value="ups.png" @(curr_host.ImgPath.Contains("ups.png") ? ("selected =\"selected\"") : (""))>UPS</option>
+                            <option value="printer.png" @(curr_host.ImgPath.Contains("printer.png") ? ("selected =\"selected\"") : (""))>Printer</option>
+                            <option value="storage.png" @(curr_host.ImgPath.Contains("storage.png") ? ("selected =\"selected\"") : (""))>Storage</option>
+                            <option value="http1.png" @(curr_host.ImgPath.Contains("http1.png") ? ("selected =\"selected\"") : (""))>Url</option>
+                            <option value="web1.png" @(curr_host.ImgPath.Contains("web1.png") ? ("selected =\"selected\"") : (""))>Web</option>
+                            <option value="web2.png" @(curr_host.ImgPath.Contains("web2.png") ? ("selected =\"selected\"") : (""))>www</option>
+                        </select>
+                    </div>
                     <div class="monitoring_host_description @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Description, new { Class = "textboxstyle", Style = "width:160px", Name = "description", id = "description", placeholder = "host description", onchange = "updateHostFields(this.form);" })</div>
-                    <div class="monitoring_host_group @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.GroupName, new { Class = "textboxstyle", Style = "width:123px", Name = "groupname", id = "groupname", placeholder = "host groupname", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_group @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.GroupName, new { Class = "textboxstyle", Style = "width:124px", Name = "groupname", id = "groupname", placeholder = "host groupname", onchange = "updateHostFields(this.form);" })</div>
 
                 </form>
 
@@ -151,38 +170,60 @@
             $('.monitoring_host_notify_checkbox').tooltip({ title: "Enable/Disable notifications for this host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
             $('.monitoring_host_isenabled_checkbox').tooltip({ title: "Enable/Disable querying this Host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
             $('.monitoring_host_details').tooltip({ title: "View host data CPU, mem, etc. and customize notification settings", animation: true, placement: "left", delay: { show: 300, hide: 100 } });
-            $('.monitoring_host_log').tooltip({ title: "Get Log for this host", animation: true, placement: "left", delay: { show: 300, hide: 100 } });            
+            $('.monitoring_host_log').tooltip({ title: "Get Log for this host", animation: true, placement: "left", delay: { show: 300, hide: 100 } });
             $('.removehosts_btn').tooltip({ title: "Delete this Host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
             $('.newiphost').tooltip({ title: "Add new IP host", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
             $('.newwebhost').tooltip({ title: "Add new WebSite", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
             $('.searchtext').tooltip({ title: "Put the part of ip/hostname", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
             $('.group_button').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
             $('.group_button_selected').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
+            $('.monitoring_host_selectpic').tooltip({ title: "Select host picture", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         })
 
 
         function updateHostFields(myform) {
 
-                var dataToPost = {};
+            var dataToPost = {};
 
-                dataToPost.hostname = myform.elements["hostname"].value;
-                dataToPost.description = myform.elements["description"].value;
-                dataToPost.groupname = myform.elements["groupname"].value;
-                dataToPost.selectedgroupname = myform.elements["selectedgroupname"].value;
-                dataToPost.hostid = myform.elements["hostid"].value;
-                dataToPost.isnotifyenabled = myform.elements["isnotifyenabled"].checked;
-                dataToPost.isenabled = myform.elements["isenabled"].checked;
+            dataToPost.hostname = myform.elements["hostname"].value;
+            dataToPost.description = myform.elements["description"].value;
+            dataToPost.groupname = myform.elements["groupname"].value;
+            dataToPost.selectedgroupname = myform.elements["selectedgroupname"].value;
+            dataToPost.hostid = myform.elements["hostid"].value;
+            dataToPost.isnotifyenabled = myform.elements["isnotifyenabled"].checked;
+            dataToPost.isenabled = myform.elements["isenabled"].checked;            
 
-                $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
-                    if (data.status == 0) {
-                        alert(data.message);
-                    }
-
-                });
+            $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+            });
         }
 
+         function updateHostPicture(myform) {
 
-       
+            var dataToPost = {};
+            
+            dataToPost.hostid = myform.elements["hostid"].value;            
+            dataToPost.imgpath = myform.elements["imgpath"].value;
+
+            $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+                else {
+                    if (dataToPost.imgpath == "defaultmonitor") {
+                        setTimeout(() => { location.reload(); }, 1500);
+
+                    } else {
+                        myform.elements["imgpath"].parentElement.parentElement.parentElement.style.backgroundImage = "url('/Content/Images/" + dataToPost.imgpath + "')";
+                    }
+                }
+            });
+        }
+        
+
+
 
     </script>
 }

@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Simple Ping Monitor Web Console")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("ASP.Net Application SPM Web API Client")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Renkti Software")]
 [assembly: AssemblyProduct("Simple Ping Monitor Web Console")]
-[assembly: AssemblyCopyright("Copyright Dmitry Koziakov © 2020")]
+[assembly: AssemblyCopyright("Copyright Dmitry Koziakov © 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0.6")]
-[assembly: AssemblyFileVersion("1.0.0.6")]
+[assembly: AssemblyVersion("1.0.0.7")]
+[assembly: AssemblyFileVersion("1.0.0.7")]

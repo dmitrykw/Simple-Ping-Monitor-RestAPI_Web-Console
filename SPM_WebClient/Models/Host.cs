@@ -15,6 +15,7 @@ namespace SPM_WebClient.Models
         public string hostid { get; set; }
         public bool? isnotifyenabled { get; set; }
         public bool? isenabled { get; set; }
+        public string imgpath { get; set; }
 
 
         public bool? isenabledcustomnotificationsettings { get; set; }
@@ -62,6 +63,23 @@ namespace SPM_WebClient.Models
                 return "Agent is Connected";
             }
         }
+
+        private string agentversion;
+        public string AgentVersion { 
+            get
+            {
+                if (agentversion == "") { return ""; }
+                if (agentversion == "1.0.0.1") { return "v.1.0.0.1 - Update this Agent"; }
+                if (agentversion == "1.0.0.2") { return "v.1.0.0.2 - Update this Agent"; }
+                return "v." + agentversion;
+            }
+
+            set
+            {
+                agentversion = value;
+            }
+        }
+
         public string HostCaptionMessage_CSSClass
         {
             get
@@ -86,7 +104,7 @@ namespace SPM_WebClient.Models
         public string HostType { get; set; }
         public string HostVisualType { get; set; }
 
-        private string statustext { get; set; }
+        private string statustext;
         public string StatusText
         {
             get { return IsEnabled ? statustext : "Host disabled"; }
@@ -95,15 +113,8 @@ namespace SPM_WebClient.Models
 
         
         public bool Status { get; set; }
-        private string imgpath;
-        public string ImgPath
-        {
-            get
-            {               
-                return @"url(\\Content\\Images\\" + imgpath + ")";
-            }
-            set { imgpath = value; }
-        }
+        
+        public string ImgPath { get; set; }        
 
 
         public DateTime HostAgentDataUpdatedDateTime { get; set; }

@@ -280,6 +280,7 @@ namespace SPM_WebClient.Models
                         GroupName = model.groupname,
                         IsNotifyEnabled = model.isnotifyenabled,
                         IsEnabled = model.isenabled,
+                        ImgPath = model.imgpath,
                         HostCustomOptions
                     });
 
