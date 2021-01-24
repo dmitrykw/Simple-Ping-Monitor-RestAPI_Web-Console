@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Simple Ping Monitor Web Console")]
+[assembly: AssemblyTitle("SPM Monitoring System Web Console")]
 [assembly: AssemblyDescription("ASP.Net Application SPM Web API Client")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Renkti Software")]
-[assembly: AssemblyProduct("Simple Ping Monitor Web Console")]
+[assembly: AssemblyProduct("SPM Monitoring System Web Console")]
 [assembly: AssemblyCopyright("Copyright Dmitry Koziakov © 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

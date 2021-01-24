@@ -16,7 +16,7 @@ namespace SPM_WebClient.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Simple Ping Monitor Web Console.";
+            ViewBag.Message = "SPM Monitoring System Web Console.";
 
             return View();
         }
