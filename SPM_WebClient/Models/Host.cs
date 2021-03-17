@@ -47,6 +47,8 @@ namespace SPM_WebClient.Models
         public bool? isenabledcustomemail { get; set; }
         public string customemail { get; set; }
 
+        public string hostdepending { get; set; }
+        
     }
 
 

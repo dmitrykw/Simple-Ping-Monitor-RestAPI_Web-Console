@@ -94,7 +94,7 @@
 
             <br />
             <p>
-                Data is actual on @Model.HostAgentDataUpdatedDateTime.ToShortDateString() @Model.HostAgentDataUpdatedDateTime.ToLongTimeString()
+                Data is up to date at: @Model.HostAgentDataUpdatedDateTime.ToShortDateString() @Model.HostAgentDataUpdatedDateTime.ToLongTimeString()
             </p>
         </div>
         <form>
@@ -146,7 +146,7 @@
                             <div style="float:left"><input type="checkbox" id="customnotifyifagentconnectionlost" name="customnotifyifagentconnectionlost" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AgentConnection_Lost").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customnotifyifagentconnectionlost"><label class="groupbox">Notify when Agent service have a connection error</label></div>
                         </li>
-                    </ul>                    
+                    </ul>
                 </div>
             </div>
             <div id="otheroptionsdiv">
@@ -202,6 +202,11 @@
                     </ul>
                 </div>
             </div>
+            <div id="hostdependingldiv">
+                <div style="float:left"><input type="checkbox" id="isenabledhostdepending" name="isenabledhostdepending" class="form-control" checked="@(Model.HostCustomOptions.Where(x => x.Key == "HostDependentOn").FirstOrDefault().Value != "" ? true : false)" onclick="updateCustomFields(this.form);" /></div>
+                <div style="float:left" class="isenabledhostdepending"><label class="groupbox">This host depends on</label></div>
+                <div class="hostdepending"><input type="text" id="hostdepending" name="hostdepending" class="form-control" style="width:200px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "HostDependentOn").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+            </div>
         </form>
     </div>
 </div>
@@ -217,11 +222,11 @@
 
 
         //ToolTips
-        let agentversion_tooltip = { title: "Your Agent version is up to date", animation: true, placement: "right", delay: { show: 300, hide: 100 } }        
+        let agentversion_tooltip = { title: "Your Agent version is up to date", animation: true, placement: "right", delay: { show: 300, hide: 100 } }
         if ($('#agentversion').text().includes("Update this Agent")) { agentversion_tooltip = { title: "For using some latest functions you need to manually update this host Agent. Unfortunately it cannot be automaticaly.", animation: true, placement: "right", delay: { show: 300, hide: 100 } } }
         $('#agentversion').tooltip(agentversion_tooltip);
        // $('#agentversion').tooltip({ title: "Use this notification settings for the current host instead of the general 'Agent Settings' on the options tab", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
-        
+
         $('.isenabledcustomnotificationsettings').tooltip({ title: "Use this notification settings for the current host instead of the general 'Agent Settings' on the options tab", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.customagentnotifyifcpuisoverload').tooltip({ title: "Notify when CPU is overloaded on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.customagentnotifyiflowfreemem').tooltip({ title: "Notify when Free memory is low on this host", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
@@ -238,11 +243,12 @@
         $('.customeventlogforwarderrorevents').tooltip({ title: "Forward all Events with Error Level from System Log", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.isenabledcustomemail').tooltip({ title: "Use custom notification e-mail for this host (instead commmon e-mail from options tab)", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.customemail').tooltip({ title: "You can insert multiple values. Use ' , ' as delimeter", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.isenabledhostdepending').tooltip({ title: "Check this if this host dependent of another one. This option can disable notifications for depended hosts (if this hosts are behind the router for example).", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.hostdepending').tooltip({ title: "Put here the hostname of master host on which this host depends (such a router for example)", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
     })
 
     function updateCustomFields(myform) {
-            
-            //Autohide and disable field
+      //Autohide and disable field
             AutoHideAndDisableFields();
 
             //Posting Data
@@ -279,6 +285,9 @@
 
             dataToPost.isenabledcustomemail = myform.elements["isenabledcustomemail"].checked;
             dataToPost.customemail = myform.elements["customemail"].value;
+            
+            if ($("#isenabledhostdepending").is(":checked")) { dataToPost.hostdepending = myform.elements["hostdepending"].value;} else { dataToPost.hostdepending = "-"; }
+
 
              $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
                     if (data.status == 0) {
@@ -287,9 +296,11 @@
 
              });
 
+
     }
 
     function AutoHideAndDisableFields() {
+
 
         //Autohide and disable field
         if ($("#isenabledcustomnotificationsettings").is(":checked")) { $("#agentitemsdiv").show(); } else { $("#agentitemsdiv").hide(); }
@@ -304,7 +315,7 @@
         if ($("#customagentnotifyifnetadaptersoverload").is(":checked")) { $("#customagentnetadaptersoverloadpercent").prop("readonly", false) } else { $("#customagentnetadaptersoverloadpercent").prop("readonly", true); }
         if ($("#customnotifyifanswertimeislong").is(":checked")) { $("#customlonganswertimemiliseconds").prop("readonly", false) } else { $("#customlonganswertimemiliseconds").prop("readonly", true); }
         if ($("#isenabledcustomemail").is(":checked")) { $("#customemail").prop("readonly", false) } else { $("#customemail").prop("readonly", true); }
-
+        if ($("#isenabledhostdepending").is(":checked")) { $("#hostdepending").prop("readonly", false) } else { $("#hostdepending").prop("readonly", true); }
 
     }
 
@@ -313,12 +324,12 @@
     function HideDataforWebHosts() {
         if ($("#hosttype").text() === "WebHost") {
             $("#hostcaptionmessage").text("This is Web Host");
-            $("#agentversion").text("");            
-            $("#agentdatadiv").hide();           
-            $("#customoptionsdiv").hide();           
-            $("#otheroptionsdiv").hide();                         
+            $("#agentversion").text("");
+            $("#agentdatadiv").hide();
+            $("#customoptionsdiv").hide();
+            $("#otheroptionsdiv").hide();
         }
-        
+
     }
 
 </script>

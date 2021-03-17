@@ -270,6 +270,7 @@ namespace SPM_WebClient.Models
                     HostCustomOptions.Add(new KeyValuePair<string, dynamic>("Custom_EventLOG_ForwardErrorEvents", model.customeventlogforwarderrorevents));
                     HostCustomOptions.Add(new KeyValuePair<string, dynamic>("isEnabledCustomEmail", model.isenabledcustomemail));
                     HostCustomOptions.Add(new KeyValuePair<string, dynamic>("Custom_Email", model.customemail));
+                    HostCustomOptions.Add(new KeyValuePair<string, dynamic>("HostDependentOn", model.hostdepending));                    
 
                     //Resulted JSON object to send
                     JSON = JsonConvert.SerializeObject(new
